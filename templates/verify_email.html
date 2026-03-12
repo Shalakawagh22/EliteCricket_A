@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Email Verification</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<header>
+
+<div class="logo">Cricket Academy</div>
+
+<nav>
+<a href="/login">Login</a>
+<a href="/register">Register</a>
+<a href="#">Contact Us</a>
+</nav>
+
+</header>
+
+
+<!-- OTP SECTION -->
+
+<div class="auth-container">
+
+<div class="verify-card">
+
+<h2>Email Verification</h2>
+
+<p>Enter the OTP sent to your email</p>
+
+<form method="POST">
+
+<input type="text" name="otp" placeholder="Enter OTP" required>
+
+<button type="submit">Verify</button>
+
+</form>
+
+</div>
+
+</div>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+<p>© 2026 Cricket Academy</p>
+
+</footer>
+
+</body>
+</html>

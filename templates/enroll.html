@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cricket Academy Enrollment</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/enroll.css') }}">
+</head>
+
+<body>
+
+<header class="header">
+  <div class="logo">🏏 Cricket Academy</div>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/user_dashboard">Dashboard</a>
+    <a href="/enroll" class="active">Enroll</a>
+    <a href="/contact">Contact</a>
+    <a href="/logout">Logout</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-content">
+    <h1>Become a Better Cricketer</h1>
+    <p>Professional coaching for batting, bowling and all-round skills.</p>
+    <a href="#enrollForm" class="cta">Start Training</a>
+  </div>
+</section>
+
+<section class="programs">
+  <h2>Our Training Programs</h2>
+  <div class="program-grid">
+    <div class="program-card">
+      <h3>Batting Coaching</h3>
+      <p>Improve shot selection, footwork and match temperament.</p>
+    </div>
+    <div class="program-card">
+      <h3>Bowling Coaching</h3>
+      <p>Speed training, swing techniques and spin mastery.</p>
+    </div>
+    <div class="program-card">
+      <h3>All-Rounder Program</h3>
+      <p>Balanced training for batting, bowling and fielding.</p>
+    </div>
+  </div>
+</section>
+
+<section class="facilities">
+  <h2>Academy Facilities</h2>
+  <div class="facility-grid">
+    <div>Indoor Nets</div>
+    <div>Professional Coaches</div>
+    <div>Video Performance Analysis</div>
+    <div>Fitness Training</div>
+  </div>
+</section>
+
+<section id="enrollForm" class="enroll-section">
+  <h2>Enroll for Training</h2>
+
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div class="flash-message">
+
+{% for msg in messages %}
+<p>{{ msg }}</p>
+{% endfor %}
+
+</div>
+{% endif %}
+{% endwith %}
+
+  <form method="POST" class="enroll-form">
+
+    <div class="form-row">
+      <input type="text" name="name" placeholder="Full Name" required>
+      <input type="email" name="email" placeholder="Email Address" required>
+    </div>
+
+    <div class="form-row">
+      <input type="number" name="age" placeholder="Age" required>
+      <input type="text" name="phone" placeholder="Phone Number">
+    </div>
+
+    <div class="form-row">
+      <select name="training" required>
+        <option value="">Select Training Type</option>
+        <option>Batting</option>
+        <option>Bowling</option>
+        <option>All Rounder</option>
+      </select>
+
+      <select name="batch" required>
+        <option value="">Select Batch Time</option>
+        <option>Morning</option>
+        <option>Evening</option>
+      </select>
+    </div>
+
+    <textarea name="message" placeholder="Tell us your cricket experience"></textarea>
+
+    <button type="submit">Enroll Now</button>
+
+  </form>
+</section>
+
+<section class="faq">
+  <h2>Frequently Asked Questions</h2>
+
+  <details>
+    <summary>Who can join the academy?</summary>
+    <p>Anyone aged 8 years and above can enroll.</p>
+  </details>
+
+  <details>
+    <summary>Do beginners need equipment?</summary>
+    <p>No, the academy provides basic training equipment.</p>
+  </details>
+
+  <details>
+    <summary>Are weekend batches available?</summary>
+    <p>Yes, weekend and weekday batches are available.</p>
+  </details>
+
+</section>
+
+<footer class="footer">
+  <p>© 2026 Cricket Academy | All Rights Reserved</p>
+</footer>
+
+</body>
+</html>

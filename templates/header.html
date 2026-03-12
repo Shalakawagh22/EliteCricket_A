@@ -1,0 +1,28 @@
+<header class="header">
+
+<div class="logo">
+Cricket Academy
+</div>
+
+<nav>
+
+<a href="/enroll">Enroll</a>
+<a href="/contact">Contact Us</a>
+
+{% if session.get('role') == 'admin' %}
+<a href="/add_player">Add</a>
+<a href="/admin_dashboard">Dashboard</a>
+<a href="/logout">Logout</a>
+
+{% elif session.get('role') == 'user' %}
+<a href="/user_dashboard">Dashboard</a>
+<a href="/logout">Logout</a>
+
+{% else %}
+<a href="/register">Register</a>
+<a href="/login">Login</a>
+{% endif %}
+
+</nav>
+
+</header>

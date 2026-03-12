@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>User Dashboard</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+
+<body>
+
+<!-- HEADER -->
+
+<header>
+
+<div class="logo"> Elite Cricket Academy</div>
+
+<nav>
+
+<a href="/">Home</a>
+<a href="/enroll">Enroll</a>
+<a href="/contact">Contact Us</a>
+<a href="/logout">Logout</a>
+
+</nav>
+
+</header>
+
+
+<!-- HERO SECTION -->
+
+<section class="hero">
+
+<div class="hero-text">
+
+<h1>Welcome to Cricket Academy</h1>
+
+<p>Improve your cricket skills with professional coaching</p>
+
+<a href="/enroll" class="hero-btn">Enroll Now</a>
+
+</div>
+<div class="card">
+
+<div class="card-icon">🏏</div>
+
+<h3>AI Cricket Assistant</h3>
+
+<p>Ask cricket related questions and get instant coaching tips.</p>
+
+<a href="/chatbot">
+<button class="ai-btn">Ask Cricket AI Coach</button>
+</a>
+
+</div>
+
+<div class="hero-img">
+
+<img src="https://images.unsplash.com/photo-1593341646782-e0b495cff86d" alt="Cricket">
+
+</div>
+
+</section>
+
+
+<!-- DASHBOARD OPTIONS -->
+
+<section class="dashboard">
+
+<h2>User Dashboard</h2>
+
+<div class="cards">
+
+
+<div class="card">
+
+<h3>My Training</h3>
+
+<p>View your training schedule</p>
+
+</div>
+
+
+<div class="card">
+
+<h3>My Performance</h3>
+
+<p>Track analytics and performance</p>
+
+</div>
+
+
+<div class="card">
+
+<h3>Enroll Programs</h3>
+
+<p>Join advanced cricket training</p>
+
+<a href="/enroll">Enroll</a>
+
+</div>
+
+
+<div class="card">
+
+<h3>Contact Coach</h3>
+
+<p>Ask questions to academy</p>
+
+<a href="/contact">Contact Us</a>
+
+</div>
+
+
+
+
+
+
+
+
+</div>
+
+</section>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+<p>© 2026 Cricket Academy | All Rights Reserved</p>
+
+</footer>
+
+
+</body>
+</html>

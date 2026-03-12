@@ -1,0 +1,16 @@
+body{
+margin:0;
+font-family:Segoe UI, Arial;
+background:#f5f7fb;
+color:#333;
+}
+
+.container{
+width:90%;
+margin:auto;
+padding:30px;
+}
+
+h1,h2,h3{
+color:#0b3d91;
+}

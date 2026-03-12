@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Cricket Academy Dashboard</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+<h2>Cricket Academy</h2>
+
+<a href="/admin_dashboard">Dashboard</a>
+<a href="/add_player">Add Player</a>
+<a href="/players">Players</a>
+<a href="/training">Training</a>
+<a href="/analytics">Analytics</a>
+<a href="/logout">Logout</a>
+
+</div>
+
+
+<!-- MAIN CONTENT -->
+
+<div class="main-content">
+
+{% block content %}
+
+{% endblock %}
+
+</div>
+
+</div>
+
+</body>
+</html>

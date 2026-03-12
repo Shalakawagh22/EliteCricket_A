@@ -1,0 +1,177 @@
+{
+  "intents":[
+
+    {
+      "tag":"greeting",
+      "patterns":[
+        "hello",
+        "hi",
+        "hey",
+        "good morning",
+        "good evening",
+        "hi coach",
+        "hello coach",
+        "hey cricket coach"
+      ],
+      "responses":[
+        "Hello! I am your Cricket AI Coach. How can I help you today?",
+        "Hi there! Ask me anything about cricket training.",
+        "Hey! I can help you with batting, bowling, fitness and practice tips."
+      ]
+    },
+
+    {
+      "tag":"batting_tips",
+      "patterns":[
+        "how to improve batting",
+        "batting tips",
+        "how can I become a better batsman",
+        "how to hit six",
+        "how to improve batting timing",
+        "tips for batting practice",
+        "how to play cricket shots",
+        "how to play cover drive",
+        "how to play fast bowlers",
+        "how to face spin bowling",
+        "how to play short ball",
+        "how to improve batting skills"
+      ],
+      "responses":[
+        "Focus on footwork and balance while playing shots.",
+        "Practice front foot and back foot shots regularly.",
+        "Watch the ball carefully and play with proper timing.",
+        "Work on your stance and bat swing for better control."
+      ]
+    },
+
+    {
+      "tag":"bowling_tips",
+      "patterns":[
+        "how to bowl fast",
+        "bowling tips",
+        "how to improve bowling",
+        "how to swing the ball",
+        "tips for fast bowling",
+        "how to bowl yorker",
+        "how to bowl better in cricket",
+        "how to bowl spin",
+        "how to bowl leg spin",
+        "how to bowl off spin",
+        "how to improve bowling accuracy"
+      ],
+      "responses":[
+        "Maintain correct seam position while bowling.",
+        "Focus on consistent line and length.",
+        "Use wrist position to control swing and spin.",
+        "Practice bowling drills daily to improve accuracy."
+      ]
+    },
+
+    {
+      "tag":"fitness",
+      "patterns":[
+        "cricket fitness",
+        "how to improve stamina",
+        "fitness for cricket",
+        "best exercises for cricket",
+        "how to stay fit for cricket",
+        "workout for cricket players",
+        "training exercises for cricketers",
+        "how to build stamina for cricket",
+        "fitness drills for cricket"
+      ],
+      "responses":[
+        "Running and sprint drills help improve stamina.",
+        "Strength training and agility exercises are important for cricketers.",
+        "Daily fitness practice improves endurance and performance.",
+        "Include running, skipping, and core exercises in your routine."
+      ]
+    },
+
+    {
+      "tag":"fielding",
+      "patterns":[
+        "how to improve fielding",
+        "fielding tips",
+        "how to catch better",
+        "how to stop the ball in fielding",
+        "fielding practice drills",
+        "how to dive in cricket fielding",
+        "tips for better fielding"
+      ],
+      "responses":[
+        "Practice catching drills regularly.",
+        "Stay low and keep your eyes on the ball while fielding.",
+        "Improve agility and reflexes for better fielding.",
+        "Fielding requires quick movement and strong focus."
+      ]
+    },
+
+    {
+      "tag":"equipment",
+      "patterns":[
+        "which cricket bat should I buy",
+        "best cricket bat for beginners",
+        "how to choose cricket bat",
+        "what equipment do I need for cricket",
+        "best shoes for cricket",
+        "cricket kit for beginners"
+      ],
+      "responses":[
+        "Choose a cricket bat based on your height and playing style.",
+        "Beginners should use lightweight bats for better control.",
+        "A basic cricket kit includes bat, pads, gloves, helmet and shoes."
+      ]
+    },
+
+    {
+      "tag":"academy_training",
+      "patterns":[
+        "what training do you provide",
+        "how cricket academy training works",
+        "what do you teach in cricket academy",
+        "how to join cricket academy",
+        "cricket coaching details",
+        "training programs for cricket players"
+      ],
+      "responses":[
+        "Our cricket academy provides batting, bowling, fielding and fitness training.",
+        "Players receive professional coaching and skill development training.",
+        "You can enroll in different training batches based on your level."
+      ]
+    },
+
+    {
+      "tag":"practice",
+      "patterns":[
+        "how often should I practice cricket",
+        "how many hours should I practice cricket",
+        "daily cricket practice routine",
+        "practice schedule for cricket",
+        "how to practice cricket alone"
+      ],
+      "responses":[
+        "Practice at least 1–2 hours daily to improve your skills.",
+        "Combine batting, bowling, and fitness practice.",
+        "Consistent daily practice is key to becoming a better player."
+      ]
+    },
+
+    {
+      "tag":"motivation",
+      "patterns":[
+        "how to become professional cricketer",
+        "how to become good cricket player",
+        "tips to become professional cricketer",
+        "how to start cricket career",
+        "how to become international cricketer"
+      ],
+      "responses":[
+        "Consistent practice and dedication are the keys to becoming a professional cricketer.",
+        "Focus on skill development, fitness and match experience.",
+        "Join a good cricket academy and practice regularly."
+      ]
+    }
+
+  ]
+}

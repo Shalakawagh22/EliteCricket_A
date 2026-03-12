@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Register</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<header>
+<div class="logo">Cricket Academy</div>
+
+<nav>
+<a href="/login">Login</a>
+<a href="#">Enroll</a>
+<a href="#">Contact Us</a>
+</nav>
+</header>
+
+
+<div class="auth-container">
+
+<form method="POST" class="auth-form">
+
+<h2>Create Account</h2>
+
+<input type="text" name="name" placeholder="Full Name" required>
+
+<input type="email" name="email" placeholder="Email Address" required>
+
+<input type="password" name="password" placeholder="Password" required>
+
+<select name="role">
+<option value="user">Register as User</option>
+<option value="admin">Register as Admin</option>
+</select>
+
+<button type="submit">Register</button>
+
+<p>Already have account? <a href="/login">Login</a></p>
+
+</form>
+
+</div>
+
+<footer>
+<p>© 2026 Cricket Academy | All Rights Reserved</p>
+</footer>
+
+</body>
+</html>
