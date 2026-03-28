@@ -875,6 +875,7 @@ def admin_delete_order(order_id):
     return redirect('/dashboard_admin#orders')
 
 # ------------------ ABOUT & PROGRAMS ------------------
+@app.route("/about")
 def about():
     return render_template("about.html")
 
