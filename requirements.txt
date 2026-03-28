@@ -1,25 +1,14 @@
-# Web framework
 Flask==2.3.6
 Flask-WTF==1.1.1
-
-# MongoDB
 pymongo==4.6.1
 dnspython==2.3.0
 bson==0.5.10
-
-# Email support
 Flask-Mail==0.9.1
 email-validator==2.1.3
-
-# Environment variables
 python-dotenv==1.0.0
-
-# OpenAI API for chatbot
 openai==1.30.1
 requests==2.31.0
 aiohttp==3.9.5
-
-# Flask dependencies
 Werkzeug==2.3.6
 Jinja2==3.1.2
 itsdangerous==2.1.2
