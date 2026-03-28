@@ -24,8 +24,12 @@ mail = Mail(app)
 # -------- MONGODB --------
 import os
 from pymongo import MongoClient
-client = MongoClient(os.getenv("mongodb://localhost:27017/"))
+
+MONGO_URI = os.getenv("MONGO_URI") or "mongodb://localhost:27017/"
+
+client = MongoClient(MONGO_URI)
 db = client["cricket_academy_db"]
+
 users = db["users"]
 enrollments = db["enrollments"]
 contact_collection = db["contact"]
