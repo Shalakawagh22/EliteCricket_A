@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Elite Cricket Academy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --secondary: #3b82f6;
+            --accent: #f59e0b;
+            --text-dark: #1f2937;
+            --text-muted: #6b7280;
+            --bg-light: #f9fafb;
+            --surface: #ffffff;
+            --border: #e5e7eb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f9fafb 0%, #f0fdf4 100%);
+            color: var(--text-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Header */
+        .main-header {
+            background: linear-gradient(135deg, var(--surface), #f0fdf4);
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .main-header nav {
+            display: flex;
+            gap: 24px;
+        }
+
+        .main-header nav a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 8px 0;
+        }
+
+        .main-header nav a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .main-header nav a:hover {
+            color: var(--primary);
+        }
+
+        .main-header nav a:hover::before {
+            width: 100%;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px 80px;
+        }
+
+        /* Page Title */
+        .checkout-header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: slideDown 0.6s ease-out 0.2s both;
+        }
+
+        .checkout-header h2 {
+            font-size: 36px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        /* Empty Cart */
+        .empty {
+            text-align: center;
+            padding: 80px 40px;
+            background: var(--surface);
+            border-radius: 24px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            animation: slideUp 0.6s ease-out;
+        }
+
+        .empty p {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        /* Flash Messages */
+        .flash {
+            padding: 14px 20px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            border-left: 4px solid;
+            font-weight: 600;
+            animation: slideDown 0.4s ease-out;
+        }
+
+        .flash.error {
+            background: #fee2e2;
+            border-left-color: #dc2626;
+            color: #991b1b;
+        }
+
+        /* Order Summary Table */
+        .summary-section {
+            background: var(--surface);
+            padding: 32px;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 32px;
+            animation: slideUp 0.6s ease-out 0.1s both;
+        }
+
+        .summary-section h2 {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 14px;
+            text-align: left;
+            font-weight: 600;
+            border-radius: 8px 8px 0 0;
+        }
+
+        td {
+            padding: 14px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:nth-child(even) {
+            background: var(--bg-light);
+        }
+
+        .total-row {
+            font-weight: 700;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(3, 102, 214, 0.1)) !important;
+            border-top: 2px solid var(--primary);
+        }
+
+        .total-row td {
+            padding: 18px 14px;
+            color: var(--primary);
+            font-size: 16px;
+        }
+
+        /* Payment Section */
+        .payment-box {
+            background: var(--surface);
+            padding: 32px;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            animation: slideUp 0.6s ease-out 0.2s both;
+        }
+
+        .payment-box h2 {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        /* Payment Options */
+        .payment-options {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 32px;
+        }
+
+        .payment-option {
+            background: var(--bg-light);
+            padding: 18px 20px;
+            border-radius: 12px;
+            border: 2px solid var(--border);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .payment-option:hover {
+            border-color: var(--primary);
+            background: #f0fdf4;
+            transform: translateX(4px);
+        }
+
+        .payment-option.active {
+            border-color: var(--primary);
+            background: rgba(16, 185, 129, 0.08);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        }
+
+        .payment-option input {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
+
+        .payment-option-content {
+            flex: 1;
+        }
+
+        .payment-option-title {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .payment-option-desc {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        /* Button */
+        .btn {
+            width: 100%;
+            padding: 16px 24px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: left 0.3s ease;
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn:hover:not(:disabled)::before {
+            left: 100%;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Footer */
+        .main-footer {
+            text-align: center;
+            padding: 30px 20px;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 13px;
+            animation: slideUp 0.6s ease-out 0.3s both;
+        }
+
+        @media (max-width: 768px) {
+            .main-header {
+                flex-direction: column;
+                gap: 16px;
+                padding: 12px 16px;
+            }
+
+            .main-header nav {
+                gap: 12px;
+            }
+
+            .container {
+                padding: 20px;
+            }
+
+            .summary-section,
+            .payment-box {
+                padding: 20px;
+            }
+
+            table th, table td {
+                padding: 10px 8px;
+                font-size: 14px;
+            }
+
+            .payment-option {
+                padding: 14px 16px;
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="main-header">
+        <div class="logo">🏏 Cricket Store</div>
+        <nav>
+            <a href="{{ url_for('homepage') }}">Home</a>
+            <a href="{{ url_for('store') }}">Store</a>
+            <a href="{{ url_for('cart_page') }}">Cart</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Empty Cart -->
+        {% if cart|length == 0 %}
+            <div class="empty">
+                <p style="font-size: 48px; margin-bottom: 16px;">🛒</p>
+                <p>Your cart is empty</p>
+                <p style="font-size: 14px; margin-bottom: 24px; color: var(--text-muted);">Add items to your cart before checking out</p>
+                <a href="{{ url_for('store') }}" style="display: inline-block; padding: 12px 28px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; text-decoration: none; border-radius: 12px; font-weight: 600; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 12px 30px rgba(16, 185, 129, 0.3)'" onmouseout="this.style.transform='none'; this.style.boxShadow='none'">Go to Store</a>
+            </div>
+        {% else %}
+            <div class="checkout-header">
+                <h2>🧾 Order Review</h2>
+                <p>Complete your purchase securely</p>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="summary-section">
+                <h2>📦 Order Summary</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in cart %}
+                            <tr>
+                                <td><strong>{{ item.name }}</strong></td>
+                                <td>₹{{ item.price }}</td>
+                                <td>{{ item.quantity }}</td>
+                                <td>₹{{ item.price * item.quantity }}</td>
+                            </tr>
+                        {% endfor %}
+                        <tr class="total-row">
+                            <td colspan="3" style="text-align: right; padding-right: 14px;">Total Amount</td>
+                            <td>₹{{ total }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Payment Method -->
+            <div class="payment-box">
+                <h2>💳 Payment Method</h2>
+                <form method="POST" action="/checkout" onsubmit="return handleCheckout(event)">
+                    <div class="payment-options">
+                        <label class="payment-option">
+                            <input type="radio" name="payment_method" value="COD" required>
+                            <div class="payment-option-content">
+                                <div class="payment-option-title">🏠 Cash on Delivery</div>
+                                <div class="payment-option-desc">Pay when your order arrives at your doorstep</div>
+                            </div>
+                        </label>
+
+                        <label class="payment-option">
+                            <input type="radio" name="payment_method" value="ONLINE" required>
+                            <div class="payment-option-content">
+                                <div class="payment-option-title">🔒 Online Payment</div>
+                                <div class="payment-option-desc">UPI, Credit Card, Debit Card, or Net Banking</div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn" id="payBtn">Complete Purchase ✓</button>
+                </form>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <p>© 2026 <strong>Elite Cricket Store</strong> | Secure & Trusted Shopping</p>
+        <p style="margin-top: 8px;">Designed for Cricket Lovers ❤️</p>
+    </footer>
+
+    <script>
+document.querySelectorAll('.payment-option').forEach(option => {
+    option.addEventListener('click', () => {
+        document.querySelectorAll('.payment-option').forEach(o => o.classList.remove('active'));
+        option.classList.add('active');
+        option.querySelector('input').checked = true;
+    });
+});
+
+function handleCheckout(event) {
+    event.preventDefault();
+
+    let selected = document.querySelector('input[name="payment_method"]:checked');
+    if (!selected) {
+        alert("Please select payment method");
+        return false;
+    }
+
+    const method = selected.value;
+
+    if (method === "ONLINE") {
+        // go to payment page
+        window.location.href = "/payment";
+        return false;
+    }
+
+    // COD → submit directly
+    fetch("/checkout", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: "payment_method=COD"
+    })
+    .then(res => window.location.href = "/order_success");
+
+    return false;
+}
+</script>
+</body>
+</html>

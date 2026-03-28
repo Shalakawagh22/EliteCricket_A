@@ -1,0 +1,139 @@
+body{
+
+margin:0;
+font-family:Arial;
+background:#0f172a;
+color:white;
+
+}
+
+/* HEADER */
+
+header{
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+background:#020617;
+padding:15px 40px;
+
+}
+
+.logo{
+font-size:20px;
+font-weight:bold;
+}
+
+nav a{
+
+color:white;
+margin-left:20px;
+text-decoration:none;
+
+}
+
+/* CONTAINER */
+
+.container{
+
+width:80%;
+margin:40px auto;
+
+}
+
+h1{
+text-align:center;
+margin-bottom:30px;
+}
+
+/* TABLE */
+
+table{
+
+width:100%;
+border-collapse:collapse;
+background:white;
+color:black;
+
+}
+
+th,td{
+
+padding:12px;
+border:1px solid #ddd;
+text-align:center;
+
+}
+
+th{
+
+background:#1e40af;
+color:white;
+
+}
+
+/* BUTTONS */
+
+button{
+
+padding:8px 14px;
+border:none;
+border-radius:5px;
+cursor:pointer;
+font-weight:bold;
+
+}
+
+.update{
+
+background:#3b82f6;
+color:white;
+
+}
+
+.delete{
+
+background:#ef4444;
+color:white;
+
+}
+
+/* UPDATE FORM */
+
+.update-form{
+
+width:400px;
+margin:auto;
+background:white;
+color:black;
+padding:30px;
+border-radius:10px;
+
+}
+
+.update-form label{
+
+display:block;
+margin-top:10px;
+
+}
+
+.update-form input{
+
+width:100%;
+padding:10px;
+margin-top:5px;
+border-radius:5px;
+border:1px solid #ccc;
+
+}
+
+.update-btn{
+
+margin-top:20px;
+width:100%;
+background:#3b82f6;
+color:white;
+padding:12px;
+
+}

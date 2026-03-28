@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - Elite Cricket Academy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --text-dark: #1f2937;
+            --text-muted: #6b7280;
+            --bg-light: #f9fafb;
+            --surface: #ffffff;
+            --border: #e5e7eb;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f9fafb 0%, #f0fdf4 100%);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--surface), #f0fdf4);
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        header .logo {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header nav { display: flex; gap: 24px; }
+
+        header nav a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 8px 0;
+        }
+
+        header nav a::before {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 0; height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        header nav a:hover { color: var(--primary); }
+        header nav a:hover::before { width: 100%; }
+
+        .main-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 48px 20px;
+        }
+
+        .profile-card {
+            width: 100%;
+            max-width: 520px;
+            background: var(--surface);
+            padding: 50px;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(16,185,129,0.1);
+            animation: slideUp 0.6s ease-out;
+        }
+
+        .avatar {
+            width: 72px;
+            height: 72px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            margin: 0 auto 16px;
+            box-shadow: 0 8px 24px rgba(16,185,129,0.3);
+        }
+
+        .profile-card h2 {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 6px;
+        }
+
+        .user-email {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-bottom: 32px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+        }
+
+        .info-row:last-child { border-bottom: none; }
+
+        .info-label {
+            font-weight: 600;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-value {
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .no-data {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 15px;
+            padding: 24px 0;
+        }
+
+        .no-data span { font-size: 36px; display: block; margin-bottom: 12px; }
+
+        .btn-back {
+            display: block;
+            width: 100%;
+            margin-top: 28px;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            box-shadow: 0 6px 20px rgba(16,185,129,0.25);
+        }
+
+        .btn-back:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(16,185,129,0.3);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        @media (max-width: 768px) {
+            header { flex-direction: column; gap: 16px; padding: 12px 16px; }
+            header nav { gap: 12px; }
+            .profile-card { padding: 32px 24px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">🏏 Cricket Academy</div>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/dashboard_user">Dashboard</a>
+            <a href="/logout">Logout</a>
+        </nav>
+    </header>
+
+    <div class="main-container">
+        <div class="profile-card">
+
+            <div class="avatar">🏏</div>
+            <h2>My Cricket Profile</h2>
+            {% if user %}
+            <p class="user-email">{{ user.name }} &bull; {{ user.email }}</p>
+            {% endif %}
+
+            {% if player %}
+
+            <div class="info-row">
+                <span class="info-label">📏 Height</span>
+                <span class="info-value">{{ player.height }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">⚖️ Weight</span>
+                <span class="info-value">{{ player.weight }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">🏟️ Matches Played</span>
+                <span class="info-value">{{ player.matches }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">🏆 Runs</span>
+                <span class="info-value">{{ player.runs }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">🎯 Role</span>
+                <span class="badge">{{ player.role }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">📅 Experience</span>
+                <span class="info-value">{{ player.experience }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">💪 Fitness Level</span>
+                <span class="info-value">{{ player.fitness }}</span>
+            </div>
+            {% if player.wickets is defined %}
+            <div class="info-row">
+                <span class="info-label">🎳 Wickets</span>
+                <span class="info-value">{{ player.wickets }}</span>
+            </div>
+            {% endif %}
+            {% if player.batting_avg %}
+            <div class="info-row">
+                <span class="info-label">📈 Batting Avg</span>
+                <span class="info-value">{{ player.batting_avg }}</span>
+            </div>
+            {% endif %}
+            {% if player.bowling_style %}
+            <div class="info-row">
+                <span class="info-label">🏏 Bowling Style</span>
+                <span class="info-value">{{ player.bowling_style }}</span>
+            </div>
+            {% endif %}
+
+            {% else %}
+            <div class="no-data">
+                <span>📋</span>
+                No player data available yet.<br>Contact your admin to add your profile.
+            </div>
+            {% endif %}
+
+            <a href="/dashboard_user" class="btn-back">← Back to Dashboard</a>
+
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2026 Elite Cricket Academy | All Rights Reserved</p>
+    </footer>
+
+</body>
+</html>

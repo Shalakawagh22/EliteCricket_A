@@ -33,3 +33,11 @@ margin-bottom:10px;
 font-size:14px;
 color:#555;
 }
+
+#message {
+    flex: 1;
+    padding: 12px;
+    border-radius: 20px;
+    border: none;
+    outline: none;
+}

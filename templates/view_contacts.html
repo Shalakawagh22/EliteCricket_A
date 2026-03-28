@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Contact Messages</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/view_contacts.css') }}">
+</head>
+
+<body>
+
+<header>
+    <div class="logo">Cricket Academy Admin</div>
+
+    <nav>
+        <a href="/dashboard_admin">Dashboard</a>
+        <a href="/view_users">Users</a>
+        <a href="/view_contacts">Contacts</a>
+        <a href="/logout">Logout</a>
+    </nav>
+</header>
+
+<div class="container">
+
+<h2>Contact Messages</h2>
+
+<table>
+
+<tr>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Subject</th>
+    <th>Message</th>
+    <th>Date</th>
+</tr>
+
+{% for contact in contacts %}
+
+<tr>
+    <td>{{ contact.name }}</td>
+    <td>{{ contact.email }}</td>
+    <td>{{ contact.subject }}</td>
+    <td>{{ contact.message }}</td>
+    <td>{{ contact.created_at }}</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+</body>
+</html>

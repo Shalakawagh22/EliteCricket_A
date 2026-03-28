@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Update User</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin_user.css') }}">
+
+</head>
+
+<body>
+
+<header>
+
+<div class="logo">🏏 Elite Cricket Academy Admin</div>
+
+<nav>
+<a href="/dashboard_admin">Dashboard</a>
+<a href="/view_user">Users</a>
+<a href="/logout">Logout</a>
+</nav>
+
+</header>
+
+
+<div class="container">
+
+<h1>Update User</h1>
+
+<form method="POST" class="update-form">
+
+<label>Name</label>
+<input type="text" name="name" value="{{ user.name }}" required>
+
+<label>Email</label>
+<input type="email" value="{{ user.email }}" disabled>
+
+<label>Password</label>
+<input type="password" name="password" value="{{ user.password }}" required>
+
+<button type="submit" class="update-btn">Update User</button>
+
+</form>
+
+</div>
+
+</body>
+</html>

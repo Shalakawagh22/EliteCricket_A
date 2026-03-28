@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Payment</title>
+<style>
+body{
+    font-family:Arial;
+    background:#f4f7ff;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.box{
+    background:white;
+    padding:30px;
+    border-radius:12px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.1);
+    text-align:center;
+    width:300px;
+}
+
+button{
+    padding:12px 20px;
+    background:linear-gradient(45deg,#00c853,#009624);
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    width:100%;
+}
+</style>
+</head>
+
+<body>
+<div class="box">
+    <h2>💳 Online Payment</h2>
+    <p>Total: <b>₹{{ total }}</b></p>
+
+    <form method="POST">
+        <button type="submit">Pay Now</button>
+    </form>
+</div>
+</body>
+</html>

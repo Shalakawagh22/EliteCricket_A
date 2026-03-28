@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Delete User</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#0f172a;
+color:white;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+}
+
+.container{
+background:#1e293b;
+padding:40px;
+border-radius:10px;
+text-align:center;
+width:350px;
+}
+
+h2{
+margin-bottom:20px;
+}
+
+.user-info{
+background:#334155;
+padding:15px;
+border-radius:6px;
+margin-bottom:20px;
+}
+
+button{
+padding:10px 20px;
+border:none;
+border-radius:5px;
+cursor:pointer;
+margin:10px;
+}
+
+.delete{
+background:#ef4444;
+color:white;
+}
+
+.cancel{
+background:#3b82f6;
+color:white;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Delete User</h2>
+
+<div class="user-info">
+
+<p><b>Name:</b> {{ user.name }}</p>
+<p><b>Email:</b> {{ user.email }}</p>
+
+</div>
+
+<p>Are you sure you want to delete this user?</p>
+
+<form method="POST">
+
+<button type="submit" class="delete">Delete</button>
+
+<a href="/admin_dashboard">
+<button type="button" class="cancel">Cancel</button>
+</a>
+
+</form>
+
+</div>
+
+</body>
+</html>

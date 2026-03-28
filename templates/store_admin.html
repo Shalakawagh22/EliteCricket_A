@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Store Management</title>
+
+<style>
+    :root {
+        --accent: #6366f1;
+        --accent-hover: #4f46e5;
+        --text-main: #1e293b;
+        --text-muted: #64748b;
+        --border: #e2e8f0;
+        --danger: #ef4444;
+        --success: #10b981;
+        --warning: #f59e0b;
+        --bg-light: #f5f7fa;
+    }
+
+    @keyframes slideUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-8px); }
+    }
+
+    @keyframes shimmer {
+        0% { background-position: -1000px 0; }
+        100% { background-position: 1000px 0; }
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', 'Outfit', sans-serif;
+        display: flex;
+        background: var(--bg-light);
+        color: var(--text-main);
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+        width: 240px;
+        height: 100vh;
+        background: linear-gradient(135deg, #ffffff 0%, var(--bg-light) 100%);
+        border-right: 2px solid var(--border);
+        padding: 20px;
+        position: fixed;
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.06);
+        z-index: 100;
+        overflow-y: auto;
+    }
+
+    .sidebar h2 {
+        font-size: 20px;
+        font-weight: 700;
+        background: linear-gradient(135deg, #818cf8, #c084fc);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 30px;
+        text-align: center;
+        letter-spacing: 1px;
+        animation: slideUp 0.6s ease-out;
+    }
+
+    .sidebar a {
+        display: flex;
+        align-items: center;
+        color: var(--text-muted);
+        padding: 14px 16px;
+        margin: 8px 0;
+        text-decoration: none;
+        border-radius: 12px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        font-weight: 500;
+        gap: 10px;
+    }
+
+    .sidebar a::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background: var(--accent);
+        border-radius: 0 4px 4px 0;
+        transform: scaleY(0);
+        transition: transform 0.3s ease;
+    }
+
+    .sidebar a:hover::before {
+        transform: scaleY(1);
+    }
+
+    .sidebar a:hover {
+        background: linear-gradient(135deg, var(--accent), #7e22ce);
+        color: white;
+        box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+        transform: translateY(-3px);
+        padding-left: 20px;
+    }
+
+    /* MAIN */
+    .main {
+        margin-left: 240px;
+        padding: 40px;
+        width: calc(100% - 240px);
+        animation: fadeIn 0.6s ease-out;
+    }
+
+    .main h1 {
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 30px;
+        background: linear-gradient(135deg, var(--text-main), var(--accent));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: slideUp 0.6s ease-out;
+    }
+
+    /* CARD */
+    .card {
+        background: linear-gradient(135deg, #ffffff 0%, var(--bg-light) 50%);
+        padding: 28px;
+        border-radius: 20px;
+        margin-bottom: 24px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        border: 2px solid var(--border);
+        transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        animation: slideUp 0.6s ease-out;
+    }
+
+    .card:hover {
+        box-shadow: 0 20px 50px rgba(99, 102, 241, 0.15);
+        border-color: var(--accent);
+        transform: translateY(-8px);
+    }
+
+    .card h3 {
+        color: var(--text-main);
+        margin-bottom: 20px;
+        font-size: 18px;
+        font-weight: 600;
+    }
+
+    /* FORM */
+    .form-group {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    input, select {
+        padding: 12px 16px;
+        margin: 5px;
+        border: 2px solid var(--border);
+        border-radius: 10px;
+        font-family: inherit;
+        transition: all 0.3s ease;
+        background: #ffffff;
+        color: var(--text-main);
+        font-size: 14px;
+    }
+
+    input::placeholder {
+        color: var(--text-muted);
+    }
+
+    input:focus, select:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 15px rgba(99, 102, 241, 0.2);
+        transform: translateY(-2px);
+    }
+
+    input[type="file"] {
+        padding: 10px 12px;
+    }
+
+    /* BUTTON */
+    button {
+        padding: 12px 24px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+        font-family: inherit;
+        font-size: 14px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    button::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+    }
+
+    button:active::before {
+        width: 300px;
+        height: 300px;
+    }
+
+    .add {
+        background: linear-gradient(135deg, var(--success), #059669);
+        color: white;
+        box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+    }
+
+    .add:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 30px rgba(16, 185, 129, 0.4);
+    }
+
+    .edit {
+        background: linear-gradient(135deg, var(--accent), #7e22ce);
+        color: white;
+        padding: 8px 16px;
+        font-size: 13px;
+        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+    }
+
+    .edit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(99, 102, 241, 0.35);
+    }
+
+    .delete {
+        background: linear-gradient(135deg, var(--danger), #dc2626);
+        color: white;
+        padding: 8px 16px;
+        font-size: 13px;
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+    }
+
+    .delete:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(239, 68, 68, 0.35);
+    }
+
+    /* TABLE */
+    .table-container {
+        overflow-x: auto;
+        border-radius: 20px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background: linear-gradient(135deg, #ffffff 0%, var(--bg-light) 100%);
+        border: 2px solid var(--border);
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    th {
+        background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+        color: var(--text-muted);
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 12px;
+        letter-spacing: 1.5px;
+        padding: 16px 20px;
+        text-align: center;
+        border-bottom: 2px solid var(--accent);
+    }
+
+    td {
+        padding: 16px 20px;
+        text-align: center;
+        border-bottom: 1px solid var(--border);
+        transition: all 0.3s ease;
+    }
+
+    tr:last-child td {
+        border-bottom: none;
+    }
+
+    tbody tr {
+        transition: all 0.3s ease;
+    }
+
+    tbody tr:hover {
+        background: linear-gradient(to right, rgba(99, 102, 241, 0.08), rgba(99, 102, 241, 0.02));
+        transform: scale(1.01);
+        border-left: 4px solid var(--accent);
+        padding-left: 16px;
+    }
+
+    img {
+        width: 70px;
+        height: 70px;
+        object-fit: cover;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    tbody tr:hover img {
+        transform: scale(1.1);
+        box-shadow: 0 8px 20px rgba(99, 102, 241, 0.25);
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+    }
+
+    .action-buttons a {
+        text-decoration: none;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+        .sidebar {
+            width: 200px;
+            padding: 15px;
+        }
+
+        .main {
+            margin-left: 200px;
+            padding: 20px;
+            width: calc(100% - 200px);
+        }
+
+        table {
+            font-size: 12px;
+        }
+
+        td, th {
+            padding: 10px;
+        }
+
+        button {
+            padding: 8px 12px;
+            font-size: 12px;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <h2>🏏 Admin</h2>
+    <a href="/dashboard_admin">📊 Dashboard</a>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<h1>🛒 Store Management</h1>
+
+<!-- ADD PRODUCT -->
+<div class="card">
+<h3>➕ Add New Product</h3>
+
+<form action="/add_product" method="POST" enctype="multipart/form-data">
+    <div class="form-group">
+        <input type="text" name="name" placeholder="Product Name" required>
+        <input type="number" name="price" placeholder="Price (₹)" required>
+        <input type="file" name="image" accept="image/*" required>
+        <button class="add" type="submit">Add Product</button>
+    </div>
+</form>
+
+</div>
+
+<!-- PRODUCT LIST -->
+<div class="card">
+
+<h3>📦 All Products</h3>
+
+<div class="table-container">
+    <table>
+    <tr>
+    <th>Image</th>
+    <th>Name</th>
+    <th>Price</th>
+    <th>Actions</th>
+    </tr>
+
+    {% for product in products %}
+    <tr>
+
+    <!-- FIXED IMAGE PATH -->
+    <td>
+        <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}">
+    </td>
+
+    <td style="font-weight: 600;">{{ product.name }}</td>
+    <td style="color: var(--accent); font-weight: 600;">₹{{ product.price }}</td>
+
+    <td>
+    <div class="action-buttons">
+        <a href="/edit_product/{{ product._id }}">
+            <button class="edit">Edit</button>
+        </a>
+
+        <a href="/delete_product/{{ product._id }}" onclick="return confirm('Are you sure?')">
+            <button class="delete">Delete</button>
+        </a>
+    </div>
+    </td>
+
+    </tr>
+    {% endfor %}
+
+    </table>
+</div>
+
+</div>
+
+</div>
+
+<script>
+    // ADD FADE-IN ANIMATION TO TABLE ROWS
+    document.addEventListener('DOMContentLoaded', function() {
+        const rows = document.querySelectorAll('tbody tr');
+        rows.forEach((row, index) => {
+            row.style.animation = `slideUp 0.5s ease-out ${index * 0.05}s backwards`;
+        });
+
+        // ADD INTERACTIVE ROW EFFECTS
+        rows.forEach(row => {
+            row.addEventListener('mouseenter', function() {
+                this.style.cursor = 'pointer';
+            });
+        });
+    });
+</script>
+
+</body>
+</html>

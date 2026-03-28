@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Users</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/view_contacts.css') }}">
+</head>
+<body>
+
+<header>
+    <div class="logo">Cricket Academy Admin</div>
+    <nav>
+        <a href="/dashboard_admin">Dashboard</a>
+        <a href="/view_users">Users</a>
+        <a href="/view_contacts">Contacts</a>
+        <a href="/logout">Logout</a>
+    </nav>
+</header>
+
+<div class="container">
+<h2>Registered Users</h2>
+
+<table>
+<tr>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Action</th>
+</tr>
+
+{% for user in users %}
+<tr>
+    <td>{{ user.name }}</td>
+    <td>{{ user.email }}</td>
+    <td>
+        <a href="/update_user/{{ user.email }}">Edit</a> |
+        <a href="/delete_user/{{ user.email }}">Delete</a>
+    </td>
+</tr>
+{% endfor %}
+</table>
+</div>
+
+</body>
+</html>

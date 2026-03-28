@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Cricket Game</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { overflow:hidden; font-family:'Segoe UI',Arial,sans-serif; background:#000; color:#fff; }
+
+#scoreboard {
+    position: fixed;
+    top: 16px; left: 16px;
+    background: rgba(0,0,0,0.75);
+    border: 1px solid rgba(255,255,255,0.2);
+    backdrop-filter: blur(8px);
+    color: white;
+    padding: 14px 20px;
+    border-radius: 14px;
+    font-size: 15px;
+    font-weight: 600;
+    z-index: 10;
+    line-height: 1.8;
+    min-width: 160px;
+}
+
+#scoreboard .label { color: rgba(255,255,255,0.6); font-size:12px; font-weight:500; }
+
+#controls {
+    position: fixed;
+    bottom: 20px; left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.7);
+    border: 1px solid rgba(255,255,255,0.15);
+    backdrop-filter: blur(6px);
+    color: rgba(255,255,255,0.85);
+    padding: 10px 24px;
+    border-radius: 30px;
+    font-size: 13px;
+    z-index: 10;
+}
+
+.back-btn {
+    position: fixed;
+    top: 16px; right: 16px;
+    padding: 8px 16px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 10px;
+    color: white;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    z-index: 10;
+    transition: background 0.2s;
+}
+.back-btn:hover { background: rgba(255,255,255,0.2); }
+
+#overlay {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    background: rgba(10,20,35,0.97);
+    border: 1px solid rgba(255,255,255,0.15);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+    padding: 36px 40px;
+    display: none;
+    text-align: center;
+    border-radius: 20px;
+    z-index: 20;
+    min-width: 300px;
+}
+#overlay h2 { font-size: 28px; margin-bottom: 10px; }
+#overlay p { color: rgba(255,255,255,0.8); font-size: 15px; margin-bottom: 24px; }
+#overlay .btn-row { display:flex; gap:12px; justify-content:center; }
+#overlay button {
+    padding: 11px 22px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+#overlay button:hover { transform: translateY(-2px); }
+.btn-play { background: linear-gradient(135deg,#28a745,#1e7e34); color:white; }
+.btn-back-go { background: rgba(255,255,255,0.1); color:white; border:1px solid rgba(255,255,255,0.2) !important; }
+
+#popup {
+    position: fixed;
+    top: 40%; left: 50%;
+    transform: translate(-50%,-50%);
+    font-size: 36px;
+    font-weight: 900;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 15;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.8);
+}
+
+#batBtn {
+    position: fixed;
+    bottom: 70px; left: 50%;
+    transform: translateX(-50%);
+    padding: 14px 40px;
+    background: linear-gradient(135deg,#28a745,#1e7e34);
+    border: none;
+    border-radius: 14px;
+    color: white;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 8px 24px rgba(40,167,69,0.4);
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+#batBtn:active { transform: translateX(-50%) scale(0.95); }
+</style>
+</head>
+<body>
+
+<div id="scoreboard">
+    <div class="label">RUNS</div>
+    <div id="runs" style="font-size:28px; color:#28a745;">0</div>
+    <div class="label" style="margin-top:8px;">BALLS</div>
+    <div id="balls">0 / 6</div>
+    <div class="label" style="margin-top:8px;">TARGET</div>
+    <div style="color:#ffd700;">20</div>
+</div>
+
+<a href="/gamezone" class="back-btn">← Back</a>
+
+<div id="popup"></div>
+
+<div id="overlay">
+    <h2 id="overlayTitle">🏏 Cricket</h2>
+    <p id="overlayMsg">Score 20+ runs in 6 balls to win!<br>Press SPACE or tap the button to hit.</p>
+    <div class="btn-row">
+        <button class="btn-play" onclick="startGame()">▶ Start Game</button>
+        <button class="btn-back-go" onclick="window.location='/gamezone'">← Game Zone</button>
+    </div>
+</div>
+
+<div id="controls">Press SPACE or tap HIT to bat</div>
+<button id="batBtn" onclick="hitBall()">🏏 HIT</button>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+
+// ===== SCENE =====
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x87ceeb);
+scene.fog = new THREE.Fog(0x87ceeb, 60, 120);
+
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 200);
+camera.position.set(0, 8, 18);
+camera.lookAt(0, 2, 0);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.shadowMap.enabled = true;
+document.body.appendChild(renderer.domElement);
+
+// Lights
+scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+const sun = new THREE.DirectionalLight(0xffffff, 1.2);
+sun.position.set(20, 40, 20);
+sun.castShadow = true;
+scene.add(sun);
+
+// Ground
+const ground = new THREE.Mesh(
+    new THREE.PlaneGeometry(200, 200),
+    new THREE.MeshLambertMaterial({ color: 0x3a9e4a })
+);
+ground.rotation.x = -Math.PI / 2;
+ground.receiveShadow = true;
+scene.add(ground);
+
+// Pitch
+const pitch = new THREE.Mesh(
+    new THREE.PlaneGeometry(4, 22),
+    new THREE.MeshLambertMaterial({ color: 0xc8a96e })
+);
+pitch.rotation.x = -Math.PI / 2;
+pitch.position.y = 0.01;
+scene.add(pitch);
+
+// Crease lines
+[[8], [-8]].forEach(([z]) => {
+    const crease = new THREE.Mesh(
+        new THREE.PlaneGeometry(4, 0.1),
+        new THREE.MeshBasicMaterial({ color: 0xffffff })
+    );
+    crease.rotation.x = -Math.PI / 2;
+    crease.position.set(0, 0.02, z);
+    scene.add(crease);
+});
+
+// Stumps
+function addStumps(z) {
+    [-0.3, 0, 0.3].forEach(x => {
+        const s = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.05, 0.05, 0.8, 8),
+            new THREE.MeshLambertMaterial({ color: 0xf5deb3 })
+        );
+        s.position.set(x, 0.4, z);
+        scene.add(s);
+    });
+}
+addStumps(8);
+addStumps(-8);
+
+// Batsman (box)
+const batsman = new THREE.Mesh(
+    new THREE.BoxGeometry(0.8, 2.2, 0.5),
+    new THREE.MeshLambertMaterial({ color: 0x1a6fc4 })
+);
+batsman.position.set(0, 1.1, 7);
+scene.add(batsman);
+
+// Bat
+const bat = new THREE.Mesh(
+    new THREE.BoxGeometry(0.15, 1.2, 0.08),
+    new THREE.MeshLambertMaterial({ color: 0xc8a96e })
+);
+bat.position.set(0.55, 1.5, 7);
+scene.add(bat);
+
+// Bowler (box)
+const bowler = new THREE.Mesh(
+    new THREE.BoxGeometry(0.8, 2.2, 0.5),
+    new THREE.MeshLambertMaterial({ color: 0xcc2200 })
+);
+bowler.position.set(0, 1.1, -10);
+scene.add(bowler);
+
+// Ball
+const ball = new THREE.Mesh(
+    new THREE.SphereGeometry(0.22, 16, 16),
+    new THREE.MeshLambertMaterial({ color: 0xcc2200 })
+);
+scene.add(ball);
+
+// ===== GAME STATE =====
+let runs = 0, balls = 0, gameActive = false, ballMoving = false;
+let ballZ = -10, ballY = 1, ballVY = 0;
+let hitThisBall = false;
+let animId;
+
+function resetBall() {
+    ballZ = -10;
+    ballY = 1;
+    ballVY = 0;
+    hitThisBall = false;
+    ball.position.set(0, ballY, ballZ);
+}
+
+function startGame() {
+    runs = 0; balls = 0; gameActive = true;
+    document.getElementById("overlay").style.display = "none";
+    resetBall();
+    ballMoving = true;
+}
+
+function hitBall() {
+    if (!gameActive || !ballMoving || hitThisBall) return;
+    const dist = Math.abs(ballZ - 7);
+    hitThisBall = true;
+
+    let scored;
+    if (dist < 0.8) scored = 6;
+    else if (dist < 1.6) scored = 4;
+    else if (dist < 2.8) scored = 2;
+    else if (dist < 4) scored = 1;
+    else scored = 0;
+
+    runs += scored;
+    showPopup(scored === 6 ? "🔥 SIX!" : scored === 4 ? "⚡ FOUR!" : scored > 0 ? "✅ +" + scored : "❌ Miss");
+
+    // bat swing animation
+    bat.rotation.z = -0.8;
+    setTimeout(() => bat.rotation.z = 0, 300);
+
+    // send ball flying
+    ballVY = scored > 0 ? 0.15 + scored * 0.02 : 0.05;
+    ball.position.z = 30; // skip to end
+    nextBall();
+}
+
+function nextBall() {
+    balls++;
+    document.getElementById("runs").innerText = runs;
+    document.getElementById("balls").innerText = balls + " / 6";
+    if (balls >= 6) { setTimeout(endGame, 600); return; }
+    setTimeout(() => { resetBall(); }, 800);
+}
+
+document.addEventListener("keydown", e => {
+    if (e.code === "Space") { e.preventDefault(); hitBall(); }
+});
+
+function showPopup(text) {
+    const p = document.getElementById("popup");
+    p.innerText = text;
+    p.style.opacity = "1";
+    setTimeout(() => p.style.opacity = "0", 900);
+}
+
+function endGame() {
+    gameActive = false; ballMoving = false;
+    const won = runs >= 20;
+    document.getElementById("overlayTitle").innerText = won ? "🏆 You Win!" : "😢 You Lose!";
+    document.getElementById("overlayMsg").innerText = "You scored " + runs + " runs in 6 balls." + (won ? "\nGreat batting!" : "\nNeed 20+ to win. Try again!");
+    document.getElementById("overlay").querySelector(".btn-play").innerText = "▶ Play Again";
+    document.getElementById("overlay").querySelector(".btn-play").onclick = startGame;
+    document.getElementById("overlay").style.display = "block";
+}
+
+// ===== ANIMATE =====
+function animate() {
+    animId = requestAnimationFrame(animate);
+
+    if (gameActive && ballMoving && !hitThisBall) {
+        ballZ += 0.25;
+        // bounce
+        ballVY -= 0.012;
+        ballY += ballVY;
+        if (ballY < 0.22) { ballY = 0.22; ballVY = Math.abs(ballVY) * 0.5; }
+        ball.position.set(0, ballY, ballZ);
+
+        // missed — ball passed batsman
+        if (ballZ > 9 && !hitThisBall) {
+            hitThisBall = true;
+            showPopup("❌ Missed!");
+            nextBall();
+        }
+    }
+
+    // bowler animation
+    bowler.position.y = 1.1 + Math.sin(Date.now() * 0.003) * 0.05;
+
+    renderer.render(scene, camera);
+}
+
+window.addEventListener("resize", () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+document.getElementById("overlay").style.display = "block";
+animate();
+</script>
+</body>
+</html>

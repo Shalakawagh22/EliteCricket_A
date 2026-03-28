@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Player Data - Elite Cricket Academy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --text-dark: #1f2937;
+            --text-muted: #6b7280;
+            --bg-light: #f9fafb;
+            --surface: #ffffff;
+            --border: #e5e7eb;
+            --danger: #ef4444;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f9fafb 0%, #f0fdf4 100%);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--surface), #f0fdf4);
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        header .logo {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header nav { display: flex; gap: 24px; }
+
+        header nav a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 8px 0;
+            font-size: 14px;
+        }
+
+        header nav a::before {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 0; height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        header nav a:hover { color: var(--primary); }
+        header nav a:hover::before { width: 100%; }
+
+        /* Main */
+        .main-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 48px 20px;
+        }
+
+        /* Card */
+        .form-card {
+            width: 100%;
+            max-width: 580px;
+            background: var(--surface);
+            padding: 50px;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(16,185,129,0.1);
+            animation: slideUp 0.6s ease-out;
+        }
+
+        .form-card h2 {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 6px;
+        }
+
+        .form-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-bottom: 32px;
+        }
+
+        /* Flash */
+        .flash-success {
+            background: #d1fae5;
+            border: 2px solid var(--primary);
+            color: var(--primary-dark);
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* Section divider */
+        .section-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--primary);
+            margin: 24px 0 12px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid #d1fae5;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            margin-top: 14px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 13px 16px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            color: var(--text-dark);
+            background: var(--bg-light);
+            transition: all 0.3s ease;
+            outline: none;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--primary);
+            background: var(--surface);
+            box-shadow: 0 0 0 3px rgba(16,185,129,0.1);
+            transform: translateY(-1px);
+        }
+
+        input::placeholder { color: var(--text-muted); }
+
+        .row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .row-2 > div label { margin-top: 0; }
+
+        /* Submit */
+        button[type="submit"] {
+            width: 100%;
+            padding: 14px 24px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 28px;
+            font-family: 'Poppins', sans-serif;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 6px 20px rgba(16,185,129,0.25);
+        }
+
+        button[type="submit"]::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: rgba(255,255,255,0.2);
+            transition: left 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(16,185,129,0.3);
+        }
+
+        button[type="submit"]:hover::before { left: 100%; }
+
+        .btn-back {
+            display: block;
+            text-align: center;
+            margin-top: 16px;
+            color: var(--text-muted);
+            font-size: 14px;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .btn-back:hover { color: var(--primary); }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 13px;
+            animation: slideUp 0.6s ease-out 0.3s both;
+        }
+
+        @media (max-width: 768px) {
+            header { flex-direction: column; gap: 16px; padding: 12px 16px; }
+            header nav { gap: 12px; }
+            .form-card { padding: 32px 24px; }
+            .row-2 { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">🏏 Cricket Academy</div>
+        <nav>
+            <a href="/dashboard_admin">Dashboard</a>
+            <a href="/view_user">Users</a>
+            <a href="/store_admin">Store</a>
+            <a href="/logout">Logout</a>
+        </nav>
+    </header>
+
+    <div class="main-container">
+        <div class="form-card">
+
+            <h2>Add Player Data</h2>
+            <p class="form-subtitle">Fill in the player's cricket profile details</p>
+
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <div class="flash-success">
+                {% for msg in messages %}<p>✓ {{ msg }}</p>{% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+
+            <form method="POST">
+
+                <!-- User Selection -->
+                <div class="section-label">👤 Select User</div>
+                <label>User</label>
+                <select name="user_id" required>
+                    <option value="" disabled selected>-- Choose a registered user --</option>
+                    {% for user in users %}
+                    <option value="{{ user.email }}">{{ user.name }} — {{ user.email }}</option>
+                    {% endfor %}
+                </select>
+
+                <!-- Physical Stats -->
+                <div class="section-label">📏 Physical Stats</div>
+                <div class="row-2">
+                    <div>
+                        <label>Height</label>
+                        <input type="text" name="height" placeholder="e.g. 5'10&quot;" required>
+                    </div>
+                    <div>
+                        <label>Weight</label>
+                        <input type="text" name="weight" placeholder="e.g. 70 kg" required>
+                    </div>
+                </div>
+
+                <!-- Cricket Stats -->
+                <div class="section-label">🏏 Cricket Stats</div>
+                <div class="row-2">
+                    <div>
+                        <label>Matches Played</label>
+                        <input type="number" name="matches" placeholder="0" min="0" required>
+                    </div>
+                    <div>
+                        <label>Runs Scored</label>
+                        <input type="number" name="runs" placeholder="0" min="0" required>
+                    </div>
+                </div>
+                <div class="row-2">
+                    <div>
+                        <label>Wickets Taken</label>
+                        <input type="number" name="wickets" placeholder="0" min="0">
+                    </div>
+                    <div>
+                        <label>Batting Average</label>
+                        <input type="text" name="batting_avg" placeholder="e.g. 42.5">
+                    </div>
+                </div>
+
+                <!-- Role & Style -->
+                <div class="section-label">🎯 Role & Style</div>
+                <label>Playing Role</label>
+                <select name="role" required>
+                    <option value="" disabled selected>-- Select role --</option>
+                    <option value="Batsman">Batsman</option>
+                    <option value="Bowler">Bowler</option>
+                    <option value="All-Rounder">All-Rounder</option>
+                    <option value="Wicket-Keeper">Wicket-Keeper</option>
+                    <option value="Wicket-Keeper Batsman">Wicket-Keeper Batsman</option>
+                </select>
+
+                <label>Bowling Style</label>
+                <select name="bowling_style">
+                    <option value="" selected>-- Select bowling style (optional) --</option>
+                    <option value="Right-arm Fast">Right-arm Fast</option>
+                    <option value="Right-arm Medium">Right-arm Medium</option>
+                    <option value="Left-arm Fast">Left-arm Fast</option>
+                    <option value="Left-arm Medium">Left-arm Medium</option>
+                    <option value="Right-arm Off-spin">Right-arm Off-spin</option>
+                    <option value="Right-arm Leg-spin">Right-arm Leg-spin</option>
+                    <option value="Left-arm Spin">Left-arm Spin</option>
+                    <option value="N/A">N/A</option>
+                </select>
+
+                <!-- Experience & Fitness -->
+                <div class="section-label">💪 Experience & Fitness</div>
+                <label>Experience</label>
+                <input type="text" name="experience" placeholder="e.g. 3 years" required>
+
+                <label>Fitness Level</label>
+                <select name="fitness" required>
+                    <option value="" disabled selected>-- Select fitness level --</option>
+                    <option value="Excellent">Excellent</option>
+                    <option value="Good">Good</option>
+                    <option value="Average">Average</option>
+                    <option value="Needs Improvement">Needs Improvement</option>
+                </select>
+
+                <button type="submit">💾 Save Player Data</button>
+
+            </form>
+
+            <a href="/dashboard_admin" class="btn-back">← Back to Dashboard</a>
+
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2026 Elite Cricket Academy | All Rights Reserved</p>
+    </footer>
+
+</body>
+</html>

@@ -1,28 +1,129 @@
-<header class="header">
+<header class="header-main">
+    <style>
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --secondary: #3b82f6;
+            --accent: #f59e0b;
+            --text-dark: #1f2937;
+            --bg-light: #f9fafb;
+            --surface: #ffffff;
+            --border: #e5e7eb;
+        }
 
-<div class="logo">
-Cricket Academy
-</div>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<nav>
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-<a href="/enroll">Enroll</a>
-<a href="/contact">Contact Us</a>
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
 
-{% if session.get('role') == 'admin' %}
-<a href="/add_player">Add</a>
-<a href="/admin_dashboard">Dashboard</a>
-<a href="/logout">Logout</a>
+        .header-main {
+            background: linear-gradient(135deg, var(--surface), #f0fdf4);
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            animation: slideDown 0.6s ease-out;
+        }
 
-{% elif session.get('role') == 'user' %}
-<a href="/user_dashboard">Dashboard</a>
-<a href="/logout">Logout</a>
+        .header-main .logo {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
 
-{% else %}
-<a href="/register">Register</a>
-<a href="/login">Login</a>
-{% endif %}
+        .header-main nav {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
 
-</nav>
+        .header-main nav a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            padding: 8px 0;
+        }
 
+        .header-main nav a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transition: width 0.3s ease;
+        }
+
+        .header-main nav a:hover {
+            color: var(--primary);
+        }
+
+        .header-main nav a:hover::before {
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .header-main {
+                flex-direction: column;
+                gap: 16px;
+                padding: 12px 16px;
+            }
+
+            .header-main nav {
+                gap: 16px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .header-main nav a {
+                font-size: 12px;
+            }
+
+            .header-main .logo {
+                font-size: 20px;
+            }
+        }
+    </style>
+
+    <div class="logo">🏏 Cricket Academy</div>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/enroll">Enroll</a>
+        <a href="/contact">Contact Us</a>
+        {% if session.get('role') == 'admin' %}
+            <a href="/add_player">Add</a>
+            <a href="/admin_dashboard">Dashboard</a>
+            <a href="/logout">Logout</a>
+        {% elif session.get('role') == 'user' %}
+            <a href="/user_dashboard">Dashboard</a>
+            <a href="/logout">Logout</a>
+        {% else %}
+            <a href="/register">Register</a>
+            <a href="/login">Login</a>
+        {% endif %}
+    </nav>
 </header>

@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Zone - Elite Cricket Academy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --secondary: #3b82f6;
+            --accent: #f59e0b;
+            --danger: #ef4444;
+            --text-dark: #1f2937;
+            --text-muted: #6b7280;
+            --bg-light: #f9fafb;
+            --surface: #ffffff;
+            --border: #e5e7eb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f9fafb 0%, #f0fdf4 100%);
+            color: var(--text-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--surface), #f0fdf4);
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        header .logo {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header nav {
+            display: flex;
+            gap: 24px;
+        }
+
+        header nav a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 8px 0;
+        }
+
+        header nav a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        header nav a:hover {
+            color: var(--primary);
+        }
+
+        header nav a:hover::before {
+            width: 100%;
+        }
+
+        /* Main Title */
+        .games-header {
+            text-align: center;
+            padding: 60px 20px 40px;
+            animation: slideDown 0.6s ease-out 0.2s both;
+        }
+
+        .games-header h1 {
+            font-size: 48px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+        }
+
+        .games-header p {
+            color: var(--text-muted);
+            font-size: 18px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Games Grid */
+        .games-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 32px;
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Game Card */
+        .game-card {
+            background: var(--surface);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: slideUp 0.6s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .game-card:nth-child(1) { animation-delay: 0.1s; }
+        .game-card:nth-child(2) { animation-delay: 0.2s; }
+        .game-card:nth-child(3) { animation-delay: 0.3s; }
+        .game-card:nth-child(4) { animation-delay: 0.4s; }
+        .game-card:nth-child(5) { animation-delay: 0.5s; }
+        .game-card:nth-child(6) { animation-delay: 0.6s; }
+
+        .game-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(16, 185, 129, 0.15);
+        }
+
+        .game-card:hover::before {
+            opacity: 1;
+        }
+
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transform: rotate(45deg);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .game-frame {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #f0fdf4, #e0f2fe);
+        }
+
+        .game-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.3s ease;
+        }
+
+        .game-card:hover .game-frame img {
+            transform: scale(1.1) rotate(2deg);
+        }
+
+        .game-content {
+            padding: 24px;
+        }
+
+        .game-content h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .game-content p {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .play-btn {
+            width: 100%;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .play-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: left 0.3s ease;
+        }
+
+        .play-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(16, 185, 129, 0.3);
+        }
+
+        .play-btn:hover::before {
+            left: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .games-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 20px;
+            }
+
+            .games-header h1 {
+                font-size: 32px;
+            }
+
+            .games-header p {
+                font-size: 14px;
+            }
+
+            header {
+                flex-direction: column;
+                gap: 16px;
+                padding: 12px 16px;
+            }
+
+            header nav {
+                gap: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">🏏 Cricket Academy</div>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/enroll">Enroll</a>
+            <a href="/gamezone">Game Zone</a>
+            <a href="/contact">Contact</a>
+        </nav>
+    </header>
+
+    <div class="games-header">
+        <h1>🎮 Game Zone</h1>
+        <p>Challenge yourself with exciting cricket games and brain teasers!</p>
+    </div>
+
+    <div class="games-container">
+        <div class="game-card">
+            <div class="game-frame">
+                <img src="https://via.placeholder.com/280x200?text=Cricket+Game" alt="Cricket Game">
+            </div>
+            <div class="game-content">
+                <h3>🏏 Cricket Challenge</h3>
+                <p>Test your cricket knowledge and skills in this thrilling challenge.</p>
+                <a href="/cricket_game_real"><button class="play-btn">Play Now →</button></a>
+            </div>
+        </div>
+
+        <div class="game-card">
+            <div class="game-frame">
+                <img src="https://via.placeholder.com/280x200?text=Fruit+Game" alt="Fruit Game">
+            </div>
+            <div class="game-content">
+                <h3>🍎 Fruit Matcher</h3>
+                <p>Quick reflexes and sharp memory - match fruits before time runs out!</p>
+                <a href="/fruit_game"><button class="play-btn">Play Now →</button></a>
+            </div>
+        </div>
+
+        <div class="game-card">
+            <div class="game-frame">
+                <img src="https://via.placeholder.com/280x200?text=Car+Game" alt="Car Game">
+            </div>
+            <div class="game-content">
+                <h3>🚗 Speed Runner</h3>
+                <p>Navigate through obstacles and reach the finish line!</p>
+                <a href="/car_game"><button class="play-btn">Play Now →</button></a>
+            </div>
+        </div>
+
+        <div class="game-card">
+            <div class="game-frame">
+                <img src="https://via.placeholder.com/280x200?text=Memory+Game" alt="Memory Game">
+            </div>
+            <div class="game-content">
+                <h3>🧠 Memory Master</h3>
+                <p>Strengthen your memory with this classic matching game.</p>
+                <a href="/memory_game"><button class="play-btn">Play Now →</button></a>
+            </div>
+        </div>
+
+        <div class="game-card">
+            <div class="game-frame">
+                <img src="https://via.placeholder.com/280x200?text=Quiz+Game" alt="Quiz Game">
+            </div>
+            <div class="game-content">
+                <h3>❓ Cricket Quiz</h3>
+                <p>How much do you know about cricket? Take the ultimate quiz!</p>
+                <a href="/quiz_game"><button class="play-btn">Play Now →</button></a>
+            </div>
+        </div>
+
+        <div class="game-card">
+            <div class="game-frame">
+                <img src="https://via.placeholder.com/280x200?text=Reaction+Game" alt="Reaction Game">
+            </div>
+            <div class="game-content">
+                <h3>⚡ Reaction Test</h3>
+                <p>Test your lightning-fast reflexes and reaction time!</p>
+                <a href="/reaction_game"><button class="play-btn">Play Now →</button></a>
+            </div>
+        </div>
+    </div>
+
+    {% include 'footer.html' %}
+</body>
+</html>

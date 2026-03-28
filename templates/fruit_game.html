@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Fruit Ninja</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+    overflow: hidden;
+    background: radial-gradient(circle at 30% 30%, #1a2a4a, #000);
+    font-family: 'Segoe UI', Arial, sans-serif;
+    color: white;
+    user-select: none;
+}
+#ui {
+    position: fixed;
+    top: 16px; left: 16px;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+#ui .stat {
+    background: rgba(0,0,0,0.6);
+    border: 1px solid rgba(255,255,255,0.15);
+    backdrop-filter: blur(6px);
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+}
+.back-btn {
+    position: fixed;
+    top: 16px; right: 16px;
+    padding: 8px 16px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 10px;
+    color: white;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    z-index: 10;
+    transition: background 0.2s;
+}
+.back-btn:hover { background: rgba(255,255,255,0.2); }
+#gameOver {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    background: rgba(10,15,30,0.97);
+    border: 1px solid rgba(255,255,255,0.15);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+    padding: 36px 40px;
+    display: none;
+    text-align: center;
+    border-radius: 20px;
+    z-index: 20;
+    min-width: 300px;
+}
+#gameOver h2 { font-size: 28px; margin-bottom: 10px; }
+#gameOver p { color: rgba(255,255,255,0.8); font-size: 15px; margin-bottom: 24px; }
+#gameOver .btn-row { display:flex; gap:12px; justify-content:center; }
+#gameOver button {
+    padding: 11px 22px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+#gameOver button:hover { transform: translateY(-2px); }
+.btn-play { background: linear-gradient(135deg,#ff5722,#e64a19); color:white; }
+.btn-back-go { background: rgba(255,255,255,0.1); color:white; border:1px solid rgba(255,255,255,0.2) !important; }
+canvas { display:block; cursor: crosshair; }
+</style>
+</head>
+<body>
+
+<div id="ui">
+    <div class="stat">🍉 Score: <span id="score">0</span></div>
+    <div class="stat">❤️ Lives: <span id="lives">3</span></div>
+</div>
+
+<a href="/gamezone" class="back-btn">← Back</a>
+
+<div id="gameOver">
+    <h2>💥 Game Over</h2>
+    <p id="finalScore"></p>
+    <div class="btn-row">
+        <button class="btn-play" onclick="restart()">▶ Play Again</button>
+        <button class="btn-back-go" onclick="window.location='/gamezone'">← Game Zone</button>
+    </div>
+</div>
+
+<canvas id="game"></canvas>
+
+<script>
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const FRUITS = [
+    { emoji:"🍉", color:"#e74c3c" },
+    { emoji:"🍊", color:"#e67e22" },
+    { emoji:"🍋", color:"#f1c40f" },
+    { emoji:"🍇", color:"#8e44ad" },
+    { emoji:"🍓", color:"#e91e63" },
+    { emoji:"🥭", color:"#ff9800" },
+    { emoji:"🍍", color:"#cddc39" },
+];
+
+let objects, score, lives, gameOver, trail, sliceParticles, frameCount;
+
+function init() {
+    objects = [];
+    score = 0;
+    lives = 3;
+    gameOver = false;
+    trail = [];
+    sliceParticles = [];
+    frameCount = 0;
+}
+
+// ===== INPUT =====
+function getPos(e) {
+    const r = canvas.getBoundingClientRect();
+    if (e.touches) return { x: e.touches[0].clientX - r.left, y: e.touches[0].clientY - r.top };
+    return { x: e.clientX - r.left, y: e.clientY - r.top };
+}
+
+function onMove(e) {
+    e.preventDefault();
+    const p = getPos(e);
+    trail.push({ x: p.x, y: p.y, t: Date.now() });
+    if (trail.length > 20) trail.shift();
+}
+
+canvas.addEventListener("mousemove", onMove);
+canvas.addEventListener("touchmove", onMove, { passive: false });
+
+// ===== SPAWN =====
+function spawnWave() {
+    const count = 2 + Math.floor(Math.random() * 3);
+    for (let i = 0; i < count; i++) {
+        const isBomb = Math.random() < 0.15;
+        const fruit = FRUITS[Math.floor(Math.random() * FRUITS.length)];
+        objects.push({
+            x: 80 + Math.random() * (canvas.width - 160),
+            y: canvas.height + 60,
+            r: 28 + Math.random() * 12,
+            vx: (Math.random() - 0.5) * 5,
+            vy: -(13 + Math.random() * 5),
+            gravity: 0.28,
+            type: isBomb ? "bomb" : "fruit",
+            emoji: isBomb ? "💣" : fruit.emoji,
+            color: isBomb ? "#555" : fruit.color,
+            sliced: false,
+            rotation: Math.random() * Math.PI * 2,
+            rotSpeed: (Math.random() - 0.5) * 0.08
+        });
+    }
+}
+
+// ===== PARTICLES =====
+function spawnParticles(x, y, color) {
+    for (let i = 0; i < 10; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = 2 + Math.random() * 4;
+        sliceParticles.push({
+            x, y,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed,
+            r: 4 + Math.random() * 4,
+            color,
+            life: 1
+        });
+    }
+}
+
+// ===== SLICE CHECK =====
+function checkSlice(o) {
+    const now = Date.now();
+    for (const p of trail) {
+        if (now - p.t > 120) continue;
+        const dx = p.x - o.x, dy = p.y - o.y;
+        if (Math.sqrt(dx * dx + dy * dy) < o.r + 6) return true;
+    }
+    return false;
+}
+
+// ===== DRAW =====
+function drawObject(o) {
+    ctx.save();
+    ctx.translate(o.x, o.y);
+    ctx.rotate(o.rotation);
+
+    // shadow
+    ctx.shadowColor = "rgba(0,0,0,0.4)";
+    ctx.shadowBlur = 10;
+
+    // circle
+    ctx.beginPath();
+    ctx.arc(0, 0, o.r, 0, Math.PI * 2);
+    ctx.fillStyle = o.color;
+    ctx.fill();
+
+    // shine
+    ctx.beginPath();
+    ctx.arc(-o.r * 0.25, -o.r * 0.25, o.r * 0.3, 0, Math.PI * 2);
+    ctx.fillStyle = "rgba(255,255,255,0.25)";
+    ctx.fill();
+
+    ctx.shadowBlur = 0;
+
+    // emoji
+    ctx.font = `${o.r * 1.1}px serif`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(o.emoji, 0, 2);
+
+    ctx.restore();
+}
+
+function drawTrail() {
+    if (trail.length < 2) return;
+    const now = Date.now();
+    ctx.save();
+    for (let i = 1; i < trail.length; i++) {
+        const age = now - trail[i].t;
+        if (age > 120) continue;
+        const alpha = 1 - age / 120;
+        const width = (1 - i / trail.length) * 6 + 1;
+        ctx.strokeStyle = `rgba(255,255,255,${alpha * 0.8})`;
+        ctx.lineWidth = width;
+        ctx.lineCap = "round";
+        ctx.beginPath();
+        ctx.moveTo(trail[i - 1].x, trail[i - 1].y);
+        ctx.lineTo(trail[i].x, trail[i].y);
+        ctx.stroke();
+    }
+    ctx.restore();
+}
+
+function drawParticles() {
+    for (let i = sliceParticles.length - 1; i >= 0; i--) {
+        const p = sliceParticles[i];
+        p.x += p.vx; p.y += p.vy; p.vy += 0.15; p.life -= 0.04;
+        if (p.life <= 0) { sliceParticles.splice(i, 1); continue; }
+        ctx.save();
+        ctx.globalAlpha = p.life;
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r * p.life, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+    }
+}
+
+// ===== LOOP =====
+function loop() {
+    if (gameOver) return;
+    requestAnimationFrame(loop);
+    frameCount++;
+
+    // background
+    ctx.fillStyle = "rgba(0,0,0,0.35)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    drawTrail();
+    drawParticles();
+
+    for (let i = objects.length - 1; i >= 0; i--) {
+        const o = objects[i];
+        o.x += o.vx;
+        o.y += o.vy;
+        o.vy += o.gravity;
+        o.rotation += o.rotSpeed;
+
+        drawObject(o);
+
+        if (!o.sliced && checkSlice(o)) {
+            o.sliced = true;
+            if (o.type === "bomb") {
+                spawnParticles(o.x, o.y, "#ff4444");
+                lives--;
+                document.getElementById("lives").innerText = lives;
+                objects.splice(i, 1);
+                if (lives <= 0) { endGame(); return; }
+                continue;
+            } else {
+                score++;
+                spawnParticles(o.x, o.y, o.color);
+                objects.splice(i, 1);
+                continue;
+            }
+        }
+
+        if (o.y > canvas.height + 80) {
+            if (o.type === "fruit" && !o.sliced) {
+                lives--;
+                document.getElementById("lives").innerText = lives;
+                if (lives <= 0) { objects.splice(i, 1); endGame(); return; }
+            }
+            objects.splice(i, 1);
+        }
+    }
+
+    // spawn
+    const spawnChance = Math.min(0.025 + frameCount * 0.00003, 0.06);
+    if (Math.random() < spawnChance) spawnWave();
+
+    document.getElementById("score").innerText = score;
+}
+
+function endGame() {
+    gameOver = true;
+    document.getElementById("finalScore").innerText = "Score: " + score + "  |  Lives lost: " + (3 - lives);
+    document.getElementById("gameOver").style.display = "block";
+}
+
+function restart() {
+    document.getElementById("gameOver").style.display = "none";
+    init();
+    loop();
+}
+
+init();
+loop();
+</script>
+</body>
+</html>

@@ -1,561 +1,525 @@
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial;
+/* GLOBAL */
+
+body {
+
+    margin: 0;
+
+    font-family: Arial, sans-serif;
+
 }
 
 
-/* BACKGROUND */
 
-body{
-height:100vh;
-background:linear-gradient(135deg,#1e3c72,#2a5298);
-display:flex;
-flex-direction:column;
+/* HERO */
+
+.hero {
+
+    height: 100vh;
+
+    background: url('../images/sakshi_cricket.jpeg') no-repeat center/cover;
+
+    position: relative;
+
 }
 
 
-/* HEADER */
 
-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:15px 60px;
-background:white;
-box-shadow:0 2px 10px rgba(0,0,0,0.1);
-}
+.overlay {
 
-.logo{
-font-size:22px;
-font-weight:bold;
-color:#1e3c72;
-}
+    background: rgba(0,0,0,0.6);
 
-nav a{
-margin-left:20px;
-text-decoration:none;
-color:#333;
-font-weight:500;
-}
+    height: 100%;
 
-nav a:hover{
-color:#2a5298;
+    color: white;
+
+    text-align: center;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
 }
 
 
-/* AUTH FORM CENTER */
 
-.auth-container{
-flex:1;
-display:flex;
-justify-content:center;
-align-items:center;
+.hero-content h1 {
+
+    font-size: 50px;
+
+    margin-bottom: 10px;
+
 }
 
 
-/* FORM CARD */
 
-.auth-form{
-background:white;
-padding:40px;
-width:350px;
-border-radius:10px;
-box-shadow:0 10px 25px rgba(0,0,0,0.2);
-animation:fadeIn 0.7s ease;
+.hero-content p {
+
+    font-size: 18px;
+
+    margin-bottom: 20px;
+
 }
 
 
-/* INPUT */
 
-.auth-form input,
-.auth-form select{
-width:100%;
-padding:12px;
-margin:10px 0;
-border:1px solid #ddd;
-border-radius:6px;
-transition:0.3s;
+.btn {
+
+    background: orange;
+
+    padding: 12px 25px;
+
+    color: white;
+
+    text-decoration: none;
+
+    border-radius: 5px;
+
 }
 
-.auth-form input:focus{
-border-color:#2a5298;
-outline:none;
+
+
+/* STATS */
+
+.stats {
+    position: absolute;
+    bottom: -40px; /* overlap effect */
+    left: 50%;
+    transform: translateX(-50%);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 70%;
+    padding: 20px 30px;
+
+    background: rgba(20, 40, 70, 0.85); /* transparent blue */
+    border-radius: 12px;
+
+    color: white;
+}
+.icon {
+    font-size: 22px;
+    margin-bottom: 5px;
+}
+.divider {
+    width: 1px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+
+.stat-box {
+
+    text-align: center;
+    flex: 1;
+}
+
+
+
+.stat-box span {
+
+    display: block;
+
+    font-size: 14px;
+
+    margin-top: 5px;
+
+}
+.stat h2 {
+    margin: 5px 0;
+    font-size: 22px;
+}
+
+.stat p {
+    font-size: 13px;
+    opacity: 0.8;
+}
+
+/* DASHBOARD */
+
+.dashboard {
+
+    text-align: center;
+
+    padding: 50px;
+
+}
+
+
+
+.dashboard-container {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 60px;
+
+    margin-top: 30px;
+
+}
+
+
+
+/* LEFT IMAGES */
+
+.dashboard-images {
+
+    position: relative;
+
+}
+
+
+
+.img-main {
+
+    width: 300px;
+
+    border-radius: 12px;
+
+}
+
+
+
+.img-small {
+
+    width: 200px;
+
+    position: absolute;
+
+    bottom: -40px;
+
+    left: -40px;
+
+    border-radius: 12px;
+
+    border: 6px solid white;
+
+}
+
+
+
+/* RIGHT CONTENT */
+
+.dashboard-content {
+
+    max-width: 500px;
+
+}
+
+
+
+/* CARDS */
+
+.cards {
+
+    display: flex;
+
+    gap: 20px;
+     
+}
+
+
+
+.card {
+    background: #ffffff; /* PURE WHITE */
+    padding: 25px;
+    width: 220px;
+    border-radius: 16px;
+
+
+    /* SOFT ELEVATED SHADOW (LIKE IMAGE) */
+    transform: translateY(-6px);
+    box-shadow: 
+        0 8px 20px rgba(143, 141, 141, 0.08),
+        0 15px 35px rgba(104, 102, 102, 0.12);
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+
+
+.card h3 {
+
+    margin-bottom: 10px;
+    transform: translateY(-6px);
+    box-shadow: 
+        0 8px 20px rgba(0, 0, 0, 0.08),
+        0 15px 35px rgba(209, 207, 207, 0.12);
+
+   
+}
+/* HOVER EFFECT */
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: 
+        0 12px 25px rgba(0, 0, 0, 0.12),
+        0 20px 40px rgba(202, 200, 200, 0.1);
+}
+.card p {
+    margin: 15px 0;
+    color: #555;
+}
+
+
+.card a {
+
+    display: inline-block;
+
+    margin-top: 10px;
+
+    background: #1e2a38;
+    transform: translateY(-6px);
+    box-shadow: 
+        0 8px 20px rgba(0, 0, 0, 0.08),
+        0 15px 35px rgba(0, 0, 0, 0.12);
+
+    color: white;
+
+    padding: 8px 12px;
+
+    border-radius: 5px;
+
+    text-decoration: none;
+
+}
+.features-list {
+    list-style: none;
+    margin-top: 25px;
+    padding: 0;
+}
+
+.features-list li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+    font-size: 15px;
+}
+
+/* BLUE CIRCLE + TICK */
+.features-list li::before {
+    content: "✔";
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 22px;
+    height: 22px;
+    margin-right: 10px;
+
+    background: #2d6cdf;   /* blue */
+    color: white;
+    border-radius: 50%;
+    font-size: 12px;
+}
+
+
+/* FEATURE LIST */
+
+.features-list {
+
+    list-style: none;
+
+    margin-top: 20px;
+
+    text-align: left;
+
+    font-size: 16px;
+
+}
+
+
+
+.features-list li {
+
+    margin-bottom: 10px;
+
+}
+
+
+
+.programs {
+    padding: 60px 20px;
+    text-align: center;
+    background: #f4f6f9;
+}
+
+.program-title {
+    font-size: 30px;
+    margin-bottom: 40px;
+}
+
+/* FLEX ROW */
+.program-container {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* CARDS */
+.program-card {
+    width: 260px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    transition: 0.3s;
+}
+
+.program-card:hover {
+    transform: translateY(-6px);
 }
 
 
 /* BUTTON */
-
-.auth-form button{
-width:100%;
-padding:12px;
-background:#2a5298;
-border:none;
-color:white;
-font-size:16px;
-border-radius:6px;
-cursor:pointer;
-transition:0.3s;
+.program-card button {
+    background: #1e2a38;
+    color: white;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
 }
 
-.auth-form button:hover{
-background:#1e3c72;
-transform:scale(1.03);
+.program-card button:hover {
+    background: #0f1b28;
+}
+
+/* BUTTON STYLE */
+
+button {
+
+    background: #1e2a38;
+
+    color: white;
+
+    padding: 10px 15px;
+
+    border: none;
+
+    border-radius: 5px;
+
+    cursor: pointer;
+
 }
 
 
-/* LINK */
 
-.auth-form p{
-margin-top:10px;
-text-align:center;
+button.highlight {
+
+    background: #1e2a38;
+
 }
 
-.auth-form a{
-color:#2a5298;
-text-decoration:none;
+
+
+/* TESTIMONIAL */
+
+.testimonial {
+
+    height: 450px;
+
+    background: url('../images/sakshi_cricket.jpeg') no-repeat center/cover;
+
+    margin-top: 50px;
+
+    position: relative;
+
 }
 
+
+
+.testimonial-overlay {
+
+    background: rgba(0,0,0,0.6);
+
+    height: 100%;
+
+    color: white;
+
+    text-align: center;
+
+    padding-top: 60px;
+
+}
+
+
+
+.testimonial-box {
+
+    background: white;
+
+    color: black;
+
+    width: 50%;
+
+    margin: 30px auto;
+
+    padding: 25px;
+
+    border-radius: 12px;
+
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);}
+
+
+    /* NAVBAR */
+
+.navbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:15px 50px;
+    background:#111;
+}
+
+.navbar h2{
+    color:white;
+}
+
+.navbar nav a{
+    color:white;
+    margin-left:20px;
+    text-decoration:none;
+    font-weight:500;
+}
+
+.login-btn{
+    background:#e63946;
+    padding:8px 15px;
+    border-radius:5px;
+}
 
 /* FOOTER */
 
-footer{
-background:white;
-text-align:center;
-padding:12px;
-font-size:14px;
+.footer{
+    background:#111;
+    color:white;
+    padding:40px 50px;
+    margin-top:40px;
 }
 
-
-/* ANIMATION */
-
-@keyframes fadeIn{
-
-from{
-opacity:0;
-transform:translateY(20px);
+.footer-container{
+    display:flex;
+    justify-content:space-between;
 }
 
-to{
-opacity:1;
-transform:translateY(0);
+.footer-section h3{
+    margin-bottom:10px;
 }
 
+.footer-section a{
+    color:white;
+    text-decoration:none;
 }
 
-
-
-
-/* RESET */
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial;
+.copyright{
+    text-align:center;
+    margin-top:20px;
 }
-
-
-/* BODY BACKGROUND */
-
-body{
-min-height:100vh;
-display:flex;
-flex-direction:column;
-
-background:linear-gradient(135deg,#1e3c72,#2a5298);
-
-}
-
-
-/* HEADER */
-
-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:15px 50px;
-
-background:white;
-box-shadow:0 2px 10px rgba(0,0,0,0.1);
-}
-
-
-.logo{
-font-size:22px;
-font-weight:bold;
-color:#1e3c72;
-}
-
-
-nav a{
-margin-left:20px;
-text-decoration:none;
-color:#333;
-font-weight:500;
-}
-
-nav a:hover{
-color:#2a5298;
-}
-
-
-/* CENTER OTP CARD */
-
-.auth-container{
-
-flex:1;
-
-display:flex;
-justify-content:center;
-align-items:center;
-
-}
-
-
-/* OTP CARD */
-
-.verify-card{
-
-background:white;
-
-padding:40px;
-
-width:350px;
-
-border-radius:10px;
-
-box-shadow:0 10px 30px rgba(0,0,0,0.2);
-
-text-align:center;
-
-animation:fadeUp 0.6s ease;
-
-}
-
-
-/* INPUT */
-
-.verify-card input{
-
-width:100%;
-
-padding:12px;
-
-margin:15px 0;
-
-border-radius:6px;
-
-border:1px solid #ccc;
-
-font-size:16px;
-
-}
-
-
-/* BUTTON */
-
-.verify-card button{
-
-width:100%;
-
-padding:12px;
-
-border:none;
-
-background:#2a5298;
-
-color:white;
-
-font-size:16px;
-
-border-radius:6px;
-
-cursor:pointer;
-
-transition:0.3s;
-
-}
-
-
-.verify-card button:hover{
-
-background:#1e3c72;
-
-transform:scale(1.05);
-
-}
-
-
-/* FOOTER */
-
-footer{
-
-background:white;
-
-text-align:center;
-
-padding:12px;
-
-}
-
-
-/* ANIMATION */
-
-@keyframes fadeUp{
-
-from{
-opacity:0;
-transform:translateY(20px);
-}
-
-to{
-opacity:1;
-transform:translateY(0);
-}
-
-}
-
-
-/* GENERAL */
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial;
-}
-
-
-/* BODY BACKGROUND */
-
-body{
-background:linear-gradient(135deg,#1e3c72,#2a5298);
-color:white;
-}
-
-
-/* HEADER */
-
-header{
-
-display:flex;
-justify-content:space-between;
-align-items:center;
-
-padding:15px 50px;
-
-background:white;
-
-color:black;
-
-box-shadow:0 2px 10px rgba(0,0,0,0.1);
-
-}
-
-
-.logo{
-font-size:22px;
-font-weight:bold;
-color:#1e3c72;
-}
-
-
-nav a{
-
-margin-left:20px;
-
-text-decoration:none;
-
-color:black;
-
-font-weight:500;
-
-}
-
-nav a:hover{
-color:#2a5298;
-}
-
-
-/* HERO SECTION */
-
-.hero{
-
-display:flex;
-
-align-items:center;
-
-justify-content:space-between;
-
-padding:60px;
-
-}
-
-
-.hero-text{
-max-width:500px;
-}
-
-
-.hero-text h1{
-font-size:40px;
-margin-bottom:15px;
-}
-
-
-.hero-btn{
-
-display:inline-block;
-
-margin-top:20px;
-
-padding:12px 25px;
-
-background:#ffcc00;
-
-color:black;
-
-text-decoration:none;
-
-border-radius:5px;
-
-font-weight:bold;
-
-transition:0.3s;
-
-}
-
-.hero-btn:hover{
-
-background:#ffd633;
-
-transform:scale(1.05);
-
-}
-
-
-.hero-img img{
-
-width:450px;
-
-border-radius:10px;
-
-box-shadow:0 10px 30px rgba(0,0,0,0.3);
-
-}
-
-
-/* DASHBOARD SECTION */
-
-.dashboard{
-
-padding:50px;
-
-text-align:center;
-
-}
-
-
-.dashboard h2{
-
-font-size:32px;
-
-margin-bottom:30px;
-
-}
-
-
-/* CARDS GRID */
-
-.cards{
-
-display:grid;
-
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-
-gap:25px;
-
-}
-
-
-/* CARD STYLE */
-
-.card{
-
-background:white;
-
-color:black;
-
-padding:10px;
-
-border-radius:10px;
-
-box-shadow:0 10px 25px rgba(0,0,0,0.2);
-
-transition:0.3s;
-
-}
-
-.card-icon{
-    color:rgb(244, 239, 239);
-}
-
-
-.card:hover{
-
-transform:translateY(-8px);
-
-}
-
-
-.card h3{
-
-margin-bottom:10px;
-
-color:#1e3c72;
-
-}
-
-
-.card a{
-
-display:inline-block;
-
-margin-top:10px;
-
-text-decoration:none;
-
-background:#1e3c72;
-
-color:white;
-
-padding:8px 15px;
-
-border-radius:5px;
-
-}
-
-
-/* FOOTER */
-
-footer{
-
-background:white;
-
-color:black;
-
-text-align:center;
-
-padding:15px;
-
-margin-top:40px;
-
-}
-
-.error{
-color:red;
-margin-bottom:10px;
-}
-
