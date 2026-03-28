@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Performance - Elite Cricket Academy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --secondary: #3b82f6;
+            --accent: #f59e0b;
+            --text-dark: #1f2937;
+            --text-muted: #6b7280;
+            --surface: #ffffff;
+            --border: #e5e7eb;
+            --bg: #f9fafb;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f9fafb, #f0fdf4);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes slideDown { from { opacity:0; transform:translateY(-20px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes slideUp   { from { opacity:0; transform:translateY(20px);  } to { opacity:1; transform:translateY(0); } }
+
+        header {
+            background: linear-gradient(135deg, #fff, #f0fdf4);
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            position: sticky; top: 0; z-index: 100;
+            animation: slideDown 0.6s ease-out;
+        }
+        header .logo {
+            font-size: 22px; font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        header nav { display: flex; gap: 20px; }
+        header nav a {
+            text-decoration: none; color: var(--text-muted);
+            font-size: 14px; font-weight: 500; transition: color 0.2s;
+        }
+        header nav a:hover { color: var(--primary); }
+
+        .main {
+            flex: 1;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 48px 24px 64px;
+            width: 100%;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: slideDown 0.6s ease-out 0.1s both;
+        }
+        .page-header h1 {
+            font-size: 38px; font-weight: 800;
+            background: linear-gradient(135deg, var(--text-dark), var(--primary));
+            -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+        .page-header p { color: var(--text-muted); font-size: 15px; }
+
+        /* Summary cards */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 18px;
+            margin-bottom: 32px;
+            animation: slideUp 0.6s ease-out 0.15s both;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+            border-top: 4px solid var(--primary);
+            transition: transform 0.3s;
+        }
+        .stat-card:hover { transform: translateY(-6px); }
+        .stat-card .stat-icon { font-size: 32px; margin-bottom: 8px; }
+        .stat-card .stat-value {
+            font-size: 32px; font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .stat-card .stat-label { font-size: 13px; color: var(--text-muted); font-weight: 500; margin-top: 4px; }
+
+        /* Charts */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 32px;
+            animation: slideUp 0.6s ease-out 0.2s both;
+        }
+
+        .chart-card {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+        }
+
+        .chart-card h3 {
+            font-size: 15px; font-weight: 700;
+            color: var(--text-dark); margin-bottom: 16px;
+        }
+
+        .chart-card canvas { max-height: 240px; }
+
+        /* Radar chart full width */
+        .chart-full {
+            grid-column: span 2;
+        }
+
+        /* History table */
+        .history-card {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+            animation: slideUp 0.6s ease-out 0.25s both;
+        }
+
+        .history-card h3 {
+            font-size: 16px; font-weight: 700;
+            color: var(--text-dark); margin-bottom: 18px;
+            padding-bottom: 12px; border-bottom: 2px solid var(--border);
+        }
+
+        table { width: 100%; border-collapse: collapse; }
+        th {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white; padding: 12px 14px;
+            text-align: left; font-size: 13px; font-weight: 600;
+        }
+        th:first-child { border-radius: 8px 0 0 0; }
+        th:last-child  { border-radius: 0 8px 0 0; }
+        td { padding: 12px 14px; border-bottom: 1px solid var(--border); font-size: 14px; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: rgba(16,185,129,0.04); }
+
+        .score-bar {
+            display: flex; align-items: center; gap: 8px;
+        }
+        .bar-bg {
+            flex: 1; height: 8px; background: var(--border); border-radius: 4px; overflow: hidden;
+        }
+        .bar-fill {
+            height: 100%; background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 4px; transition: width 0.6s ease;
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center; padding: 80px 20px;
+            background: var(--surface); border-radius: 20px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+        }
+        .empty-state .icon { font-size: 56px; margin-bottom: 16px; }
+        .empty-state h3 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+        .empty-state p { color: var(--text-muted); font-size: 14px; }
+
+        footer {
+            text-align: center; padding: 16px;
+            background: var(--surface); border-top: 1px solid var(--border);
+            color: var(--text-muted); font-size: 13px;
+        }
+
+        @media (max-width: 768px) {
+            header { flex-direction: column; gap: 12px; padding: 12px 16px; }
+            .charts-grid { grid-template-columns: 1fr; }
+            .chart-full { grid-column: span 1; }
+            .page-header h1 { font-size: 28px; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo"><a href="/dashboard_user" style="text-decoration:none;"><img src="/static/images/logo.png" alt="Elite Cricket Academy" style="height:48px; width:auto; object-fit:contain;"></a></div>
+    <nav>
+        <a href="/dashboard_user">Home</a>
+        <a href="/training_schedule">Schedule</a>
+        <a href="/logout">Logout</a>
+    </nav>
+</header>
+
+<div class="main">
+
+    <div class="page-header">
+        <h1>📊 My Performance</h1>
+        <p>{% if user %}{{ user.name }} — {% endif %}Track your cricket progress over time</p>
+    </div>
+
+    {% if records %}
+
+    <!-- Summary Stats -->
+    {% set avg_bat  = (records | sum(attribute='batting_score')  / records|length) | round(1) %}
+    {% set avg_bowl = (records | sum(attribute='bowling_wickets') / records|length) | round(1) %}
+    {% set avg_field= (records | sum(attribute='fielding_score') / records|length) | round(1) %}
+    {% set avg_fit  = (records | sum(attribute='fitness_score')  / records|length) | round(1) %}
+
+    <div class="summary-grid">
+        <div class="stat-card" style="border-top-color:#10b981">
+            <div class="stat-icon">🏏</div>
+            <div class="stat-value">{{ avg_bat }}</div>
+            <div class="stat-label">Avg Batting Score</div>
+        </div>
+        <div class="stat-card" style="border-top-color:#6366f1">
+            <div class="stat-icon">🎳</div>
+            <div class="stat-value">{{ avg_bowl }}</div>
+            <div class="stat-label">Avg Wickets/Session</div>
+        </div>
+        <div class="stat-card" style="border-top-color:#3b82f6">
+            <div class="stat-icon">🏃</div>
+            <div class="stat-value">{{ avg_field }}</div>
+            <div class="stat-label">Avg Fielding Score</div>
+        </div>
+        <div class="stat-card" style="border-top-color:#f59e0b">
+            <div class="stat-icon">💪</div>
+            <div class="stat-value">{{ avg_fit }}</div>
+            <div class="stat-label">Avg Fitness Score</div>
+        </div>
+        <div class="stat-card" style="border-top-color:#059669">
+            <div class="stat-icon">📅</div>
+            <div class="stat-value">{{ records|length }}</div>
+            <div class="stat-label">Sessions Recorded</div>
+        </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="charts-grid">
+        <div class="chart-card">
+            <h3>🏏 Batting Progress</h3>
+            <canvas id="battingChart"></canvas>
+        </div>
+        <div class="chart-card">
+            <h3>🎳 Bowling Wickets</h3>
+            <canvas id="bowlingChart"></canvas>
+        </div>
+        <div class="chart-card chart-full">
+            <h3>📈 Overall Performance Trend</h3>
+            <canvas id="overallChart"></canvas>
+        </div>
+    </div>
+
+    <!-- History Table -->
+    <div class="history-card">
+        <h3>📋 Session History</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Batting</th>
+                    <th>Wickets</th>
+                    <th>Fielding</th>
+                    <th>Fitness</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in records | reverse %}
+                <tr>
+                    <td>{{ r.session_date }}</td>
+                    <td>
+                        <div class="score-bar">
+                            <span style="min-width:28px; font-weight:600;">{{ r.batting_score }}</span>
+                            <div class="bar-bg"><div class="bar-fill" data-w="{{ r.batting_score }}"></div></div>
+                        </div>
+                    </td>
+                    <td style="font-weight:600; color:var(--primary-dark);">{{ r.bowling_wickets }}</td>
+                    <td>
+                        <div class="score-bar">
+                            <span style="min-width:28px; font-weight:600;">{{ r.fielding_score }}</span>
+                            <div class="bar-bg"><div class="bar-fill bar-blue" data-w="{{ r.fielding_score }}"></div></div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="score-bar">
+                            <span style="min-width:28px; font-weight:600;">{{ r.fitness_score }}</span>
+                            <div class="bar-bg"><div class="bar-fill bar-amber" data-w="{{ r.fitness_score }}"></div></div>
+                        </div>
+                    </td>
+                    <td style="font-size:13px; color:var(--text-muted);">{{ r.notes or '—' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% else %}
+    <div class="empty-state">
+        <div class="icon">📊</div>
+        <h3>No performance data yet</h3>
+        <p>Your coach hasn't added any performance records for you yet.<br>Check back after your next training session!</p>
+    </div>
+    {% endif %}
+
+</div>
+
+<footer>© 2026 Elite Cricket Academy | All Rights Reserved</footer>
+
+{% if records %}
+<div id="chartData"
+    data-labels='{{ records | map(attribute="session_date") | list | tojson }}'
+    data-batting='{{ records | map(attribute="batting_score") | list | tojson }}'
+    data-bowling='{{ records | map(attribute="bowling_wickets") | list | tojson }}'
+    data-fielding='{{ records | map(attribute="fielding_score") | list | tojson }}'
+    data-fitness='{{ records | map(attribute="fitness_score") | list | tojson }}'
+    style="display:none"></div>
+<script>
+const d = document.getElementById('chartData').dataset;
+const labels   = JSON.parse(d.labels);
+const batting  = JSON.parse(d.batting);
+const bowling  = JSON.parse(d.bowling);
+const fielding = JSON.parse(d.fielding);
+const fitness  = JSON.parse(d.fitness);
+
+const commonOpts = {
+    responsive: true,
+    maintainAspectRatio: true,
+    plugins: { legend: { display: false } },
+    scales: {
+        y: { beginAtZero: true, grid: { color: '#f0fdf4' }, ticks: { color: '#6b7280' } },
+        x: { grid: { display: false }, ticks: { color: '#6b7280', maxRotation: 30 } }
+    }
+};
+
+new Chart(document.getElementById('battingChart'), {
+    type: 'line',
+    data: {
+        labels,
+        datasets: [{
+            data: batting,
+            borderColor: '#10b981',
+            backgroundColor: 'rgba(16,185,129,0.1)',
+            borderWidth: 3,
+            fill: true,
+            tension: 0.4,
+            pointBackgroundColor: '#10b981',
+            pointRadius: 5
+        }]
+    },
+    options: commonOpts
+});
+
+new Chart(document.getElementById('bowlingChart'), {
+    type: 'bar',
+    data: {
+        labels,
+        datasets: [{
+            data: bowling,
+            backgroundColor: 'rgba(99,102,241,0.7)',
+            borderRadius: 8,
+            borderSkipped: false
+        }]
+    },
+    options: { ...commonOpts, plugins: { legend: { display: false } } }
+});
+
+new Chart(document.getElementById('overallChart'), {
+    type: 'line',
+    data: {
+        labels,
+        datasets: [
+            { label: 'Batting',  data: batting,  borderColor: '#10b981', backgroundColor: 'rgba(16,185,129,0.05)',  borderWidth: 2, tension: 0.4, fill: false, pointRadius: 4 },
+            { label: 'Fielding', data: fielding, borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,0.05)',  borderWidth: 2, tension: 0.4, fill: false, pointRadius: 4 },
+            { label: 'Fitness',  data: fitness,  borderColor: '#f59e0b', backgroundColor: 'rgba(245,158,11,0.05)',  borderWidth: 2, tension: 0.4, fill: false, pointRadius: 4 }
+        ]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: { legend: { labels: { color: '#1f2937', font: { family: 'Poppins' } } } },
+        scales: {
+            y: { beginAtZero: true, max: 100, grid: { color: '#f0fdf4' }, ticks: { color: '#6b7280' } },
+            x: { grid: { display: false }, ticks: { color: '#6b7280', maxRotation: 30 } }
+        }
+    }
+});
+</script>
+{% endif %}
+
+</body>
+</html>

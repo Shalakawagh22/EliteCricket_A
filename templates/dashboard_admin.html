@@ -52,6 +52,7 @@
             height: 100vh;
             z-index: 100;
             box-shadow: 4px 0 20px rgba(0, 0, 0, 0.06);
+            overflow-y: auto;
         }
 
         .sidebar h2 {
@@ -484,7 +485,11 @@ label {
 
     <!-- SIDEBAR -->
     <div class="sidebar">
-        <h2>🏏 Elite Academy</h2>
+        <div style="text-align:center; margin-bottom:32px; padding-bottom:20px; border-bottom:1px solid rgba(255,255,255,0.1);">
+            <a href="/dashboard_admin" style="text-decoration:none;">
+                <img src="/static/images/logo.png" alt="Elite Cricket Academy" style="height:56px; width:auto; object-fit:contain; filter:brightness(0) invert(1);">
+            </a>
+        </div>
         <div class="nav-items">
             <a href="#" onclick="showSection('dashboard', this)" class="active">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
@@ -512,11 +517,27 @@ label {
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
                 Reviews
             </a>
-            <a href="/store_admin">
+            <a href="#" onclick="showSection('orders', this)">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                Orders
+            </a>
+            <a href="#" onclick="showSection('store', this)">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                 Store
             </a>
-            <a href="/dashboard_user" style="margin-top: auto;">
+            <a href="#" onclick="showSection('schedule', this)">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                Schedule
+            </a>
+            <a href="#" onclick="showSection('performance', this)">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                Performance
+            </a>
+            <a href="/ml_predictions">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+                ML Predictions
+            </a>
+            <a href="/logout" style="margin-top: auto;">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
                 Logout
             </a>
@@ -563,6 +584,16 @@ label {
                     <div class="card-info">
                         <h3>Messages</h3>
                         <h2>{{ contact_count }}</h2>
+                    </div>
+                </div>
+
+                <div class="card" onclick="showSection('orders', null)" style="cursor:pointer;">
+                    <div class="card-icon" style="background:rgba(16,185,129,0.1); color:var(--success);">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                    </div>
+                    <div class="card-info">
+                        <h3>Orders</h3>
+                        <h2>{{ orders_count }}</h2>
                     </div>
                 </div>
             </div>
@@ -807,6 +838,327 @@ label {
         {% endif %}
     </div>
 </div>
+
+<!-- ORDERS SECTION -->
+<div id="orders" class="section">
+    <div class="table-container">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; flex-wrap:wrap; gap:12px;">
+            <h2 style="font-size:22px; font-weight:700; background:linear-gradient(135deg,var(--accent),#7e22ce); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;">🛍 Purchase Orders</h2>
+            <span style="background:rgba(99,102,241,0.1); color:var(--accent); padding:6px 16px; border-radius:20px; font-size:13px; font-weight:700; border:1.5px solid rgba(99,102,241,0.3);">{{ orders_count }} Orders</span>
+        </div>
+
+        {% if all_orders %}
+        <table>
+            <tr>
+                <th>Order ID</th>
+                <th>User</th>
+                <th>Items</th>
+                <th>Total</th>
+                <th>Payment</th>
+                <th>Tracking Status</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+            {% for o in all_orders %}
+            <tr>
+                <td style="font-weight:700; font-family:monospace; color:var(--accent);">#{{ o.order_id }}</td>
+                <td style="font-size:13px; color:var(--text-muted);">{{ o.user or '—' }}</td>
+                <td>
+                    {% for item in o.get('items', []) %}
+                    <div style="font-size:13px;">{{ item.name }} × {{ item.quantity }}</div>
+                    {% endfor %}
+                </td>
+                <td style="font-weight:700; color:var(--success);">₹{{ o.total }}</td>
+                <td>
+                    {% if o.payment_method == 'COD' %}
+                    <span style="background:rgba(245,158,11,0.12); color:#b45309; padding:4px 12px; border-radius:20px; font-size:12px; font-weight:700; border:1px solid rgba(245,158,11,0.3);">💵 COD</span>
+                    {% else %}
+                    <span style="background:rgba(16,185,129,0.12); color:var(--success); padding:4px 12px; border-radius:20px; font-size:12px; font-weight:700; border:1px solid rgba(16,185,129,0.3);">✅ Online</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <form method="POST" action="/admin/order/update_tracking/{{ o.order_id }}" style="display:flex; gap:6px; align-items:center;">
+                        <select name="tracking_status" style="padding:6px 10px; border-radius:8px; border:2px solid var(--border); font-family:inherit; font-size:12px; background:#f8fafc; min-width:140px;">
+                            {% set steps = ['Order Placed','Processing','Packed','Out for Delivery','Delivered'] %}
+                            {% for step in steps %}
+                            <option value="{{ step }}" {% if o.get('tracking_status', 'Order Placed') == step %}selected{% endif %}>{{ step }}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit" class="btn btn-edit" style="padding:6px 12px; font-size:12px; white-space:nowrap;">Update</button>
+                    </form>
+                </td>
+                <td style="font-size:13px; color:var(--text-muted);">
+                    {{ o.created_at.strftime('%d %b %Y') if o.created_at else '—' }}
+                </td>
+                <td>
+                    <form method="POST" action="/admin/order/delete/{{ o.order_id }}" onsubmit="return confirm('Delete this order?')">
+                        <button type="submit" class="btn btn-delete" style="padding:6px 12px; font-size:12px;">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <div style="text-align:center; padding:60px 20px; color:var(--text-muted);">
+            <div style="font-size:48px; margin-bottom:12px;">🛍</div>
+            <div style="font-size:16px; font-weight:600;">No orders yet</div>
+            <div style="font-size:13px; margin-top:6px;">Orders placed by users will appear here.</div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- SCHEDULE SECTION -->
+<div id="schedule" class="section">
+    <div class="table-container">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; flex-wrap:wrap; gap:12px;">
+            <h2 style="font-size:22px; font-weight:700; background:linear-gradient(135deg,var(--accent),#7e22ce); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;">📅 Training Schedule</h2>
+        </div>
+
+        <!-- Add Schedule Form -->
+        <div style="background:var(--surface-hover); border:2px solid var(--border); border-radius:16px; padding:24px; margin-bottom:28px;">
+            <h3 style="font-size:16px; font-weight:700; margin-bottom:18px; color:var(--text-main);">➕ Add New Session</h3>
+            <form method="POST" action="/admin/schedule/add">
+                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:16px;">
+                    <div>
+                        <label>Title</label>
+                        <input type="text" name="title" placeholder="e.g. Batting Practice" required>
+                    </div>
+                    <div>
+                        <label>Date</label>
+                        <input type="date" name="date" required>
+                    </div>
+                    <div>
+                        <label>Time</label>
+                        <input type="time" name="time" required>
+                    </div>
+                    <div>
+                        <label>Duration</label>
+                        <input type="text" name="duration" placeholder="e.g. 2 hours">
+                    </div>
+                    <div>
+                        <label>Coach</label>
+                        <input type="text" name="coach" placeholder="Coach name">
+                    </div>
+                    <div>
+                        <label>Batch</label>
+                        <select name="batch">
+                            <option value="All">All Batches</option>
+                            <option value="Beginner">Beginner</option>
+                            <option value="Intermediate">Intermediate</option>
+                            <option value="Advanced">Advanced</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="margin-top:14px;">
+                    <label>Notes (optional)</label>
+                    <input type="text" name="notes" placeholder="Any additional info...">
+                </div>
+                <button class="btn btn-edit" type="submit" style="margin-top:18px; padding:11px 28px; font-size:14px;">💾 Add Session</button>
+            </form>
+        </div>
+
+        <!-- Schedule Table -->
+        {% if schedules %}
+        <table>
+            <tr>
+                <th>Title</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Duration</th>
+                <th>Coach</th>
+                <th>Batch</th>
+                <th>Notes</th>
+                <th>Action</th>
+            </tr>
+            {% for s in schedules %}
+            <tr>
+                <td style="font-weight:600;">{{ s.title }}</td>
+                <td>{{ s.date }}</td>
+                <td>{{ s.time }}</td>
+                <td>{{ s.duration or '—' }}</td>
+                <td>{{ s.coach or '—' }}</td>
+                <td><span class="badge">{{ s.batch }}</span></td>
+                <td style="font-size:13px; color:var(--text-muted);">{{ s.notes or '—' }}</td>
+                <td>
+                    <form method="POST" action="/admin/schedule/delete/{{ s._id }}" style="display:inline;">
+                        <button type="submit" class="btn btn-delete" style="padding:6px 12px; font-size:12px;">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <div style="text-align:center; padding:60px 20px; color:var(--text-muted);">
+            <div style="font-size:48px; margin-bottom:12px;">📅</div>
+            <div style="font-size:16px; font-weight:600;">No sessions scheduled yet</div>
+            <div style="font-size:13px; margin-top:6px;">Add a training session using the form above.</div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- PERFORMANCE SECTION -->
+<div id="performance" class="section">
+    <div class="table-container">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; flex-wrap:wrap; gap:12px;">
+            <h2 style="font-size:22px; font-weight:700; background:linear-gradient(135deg,var(--accent),#7e22ce); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;">📊 Performance Analytics</h2>
+        </div>
+
+        <!-- Add Performance Form -->
+        <div style="background:var(--surface-hover); border:2px solid var(--border); border-radius:16px; padding:24px; margin-bottom:28px;">
+            <h3 style="font-size:16px; font-weight:700; margin-bottom:18px; color:var(--text-main);">➕ Add Performance Record</h3>
+            <form method="POST" action="/admin/performance/add">
+                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px,1fr)); gap:16px;">
+                    <div>
+                        <label>Select User</label>
+                        <select name="user_email" required>
+                            <option value="" disabled selected>-- Choose user --</option>
+                            {% for u in all_perf_users %}
+                            <option value="{{ u.email }}">{{ u.name }} ({{ u.email }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label>Session Date</label>
+                        <input type="date" name="session_date" required>
+                    </div>
+                    <div>
+                        <label>Batting Score</label>
+                        <input type="number" name="batting_score" placeholder="0–100" min="0" max="100">
+                    </div>
+                    <div>
+                        <label>Bowling Wickets</label>
+                        <input type="number" name="bowling_wickets" placeholder="0–10" min="0" max="10">
+                    </div>
+                    <div>
+                        <label>Fielding Score</label>
+                        <input type="number" name="fielding_score" placeholder="0–100" min="0" max="100">
+                    </div>
+                    <div>
+                        <label>Fitness Score</label>
+                        <input type="number" name="fitness_score" placeholder="0–100" min="0" max="100">
+                    </div>
+                </div>
+                <div style="margin-top:14px;">
+                    <label>Notes (optional)</label>
+                    <input type="text" name="notes" placeholder="Coach observations...">
+                </div>
+                <button class="btn btn-edit" type="submit" style="margin-top:18px; padding:11px 28px; font-size:14px;">💾 Save Record</button>
+            </form>
+        </div>
+
+        <!-- Records Table -->
+        {% if all_performance %}
+        <table>
+            <tr>
+                <th>User</th>
+                <th>Date</th>
+                <th>Batting</th>
+                <th>Wickets</th>
+                <th>Fielding</th>
+                <th>Fitness</th>
+                <th>Notes</th>
+                <th>Action</th>
+            </tr>
+            {% for p in all_performance %}
+            <tr>
+                <td style="font-weight:600; font-size:13px;">{{ p.user_email }}</td>
+                <td>{{ p.session_date }}</td>
+                <td><span class="badge">{{ p.batting_score }}</span></td>
+                <td>{{ p.bowling_wickets }}</td>
+                <td>{{ p.fielding_score }}</td>
+                <td>{{ p.fitness_score }}</td>
+                <td style="font-size:12px; color:var(--text-muted);">{{ p.notes or '—' }}</td>
+                <td>
+                    <form method="POST" action="/admin/performance/delete/{{ p._id }}" style="display:inline;">
+                        <button type="submit" class="btn btn-delete" style="padding:6px 12px; font-size:12px;">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <div style="text-align:center; padding:60px 20px; color:var(--text-muted);">
+            <div style="font-size:48px; margin-bottom:12px;">📊</div>
+            <div style="font-size:16px; font-weight:600;">No performance records yet</div>
+            <div style="font-size:13px; margin-top:6px;">Add records using the form above.</div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- STORE SECTION -->
+<div id="store" class="section">
+    <div class="table-container">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; flex-wrap:wrap; gap:12px;">
+            <h2 style="font-size:22px; font-weight:700; background:linear-gradient(135deg,var(--accent),#7e22ce); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;">🛒 Store Management</h2>
+        </div>
+
+        <!-- Add Product Form -->
+        <div style="background:var(--surface-hover); border:2px solid var(--border); border-radius:16px; padding:24px; margin-bottom:28px;">
+            <h3 style="font-size:16px; font-weight:700; margin-bottom:18px; color:var(--text-main);">➕ Add New Product</h3>
+            <form action="/add_product" method="POST" enctype="multipart/form-data">
+                <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:16px; align-items:end;">
+                    <div>
+                        <label>Product Name</label>
+                        <input type="text" name="name" placeholder="e.g. Cricket Bat" required>
+                    </div>
+                    <div>
+                        <label>Price (₹)</label>
+                        <input type="number" name="price" placeholder="e.g. 2500" required>
+                    </div>
+                    <div>
+                        <label>Product Image</label>
+                        <input type="file" name="image" accept="image/*" required>
+                    </div>
+                    <div style="display:flex; align-items:flex-end;">
+                        <button class="btn btn-edit" type="submit" style="padding:12px 24px; font-size:14px; width:100%;">➕ Add Product</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Products Table -->
+        {% if store_products %}
+        <table>
+            <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+            {% for product in store_products %}
+            <tr>
+                <td>
+                    <img src="{{ url_for('static', filename=product.image) }}"
+                         onerror="this.src='https://via.placeholder.com/60'"
+                         style="width:60px; height:60px; object-fit:cover; border-radius:10px;">
+                </td>
+                <td style="font-weight:600; text-align:left;">{{ product.name }}</td>
+                <td style="color:var(--success); font-weight:700;">₹{{ product.price }}</td>
+                <td>
+                    <div style="display:flex; gap:8px; justify-content:center;">
+                        <a href="/edit_product/{{ product._id }}" style="text-decoration:none;">
+                            <button class="btn btn-edit" style="padding:7px 14px; font-size:12px;">Edit</button>
+                        </a>
+                        <a href="/delete_product/{{ product._id }}" onclick="return confirm('Delete this product?')" style="text-decoration:none;">
+                            <button class="btn btn-delete" style="padding:7px 14px; font-size:12px;">Delete</button>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <div style="text-align:center; padding:60px 20px; color:var(--text-muted);">
+            <div style="font-size:48px; margin-bottom:12px;">🛒</div>
+            <div style="font-size:16px; font-weight:600;">No products yet</div>
+            <div style="font-size:13px; margin-top:6px;">Add your first product using the form above.</div>
+        </div>
+        {% endif %}
+    </div>
+</div>
     </div>
 
     <script>
@@ -817,12 +1169,17 @@ label {
             'enroll': 'Program Enrollments',
             'contact': 'Incoming Messages',
             'player': 'Add Player Data',
-            'reviews': 'User Reviews'
+            'reviews': 'User Reviews',
+            'orders': 'Purchase Orders',
+            'schedule': 'Training Schedule',
+            'performance': 'Performance Analytics',
+            'store': 'Store Management'
         };
 
         function showSection(id, element) {
             // Save to localStorage
             localStorage.setItem('adminSection', id);
+            localStorage.setItem('adminSectionPage', window.location.pathname);
 
             // Update Navigation
             document.querySelectorAll('.nav-items a').forEach(el => el.classList.remove('active'));
@@ -855,22 +1212,27 @@ label {
 
         // ADD INTERACTIVE TABLE ROW EFFECTS + RESTORE SECTION
         document.addEventListener('DOMContentLoaded', function() {
-            // Restore last active section on refresh
+            // Restore last active section on refresh (only if on same page)
             const saved = localStorage.getItem('adminSection');
-            if (saved && document.getElementById(saved)) {
-                const navLink = document.querySelector(`.nav-items a[onclick*="'${saved}'"]`);
+            const savedPage = localStorage.getItem('adminSectionPage');
+            const isReload = performance.getEntriesByType('navigation')[0]?.type === 'reload';
+            if (saved && document.getElementById(saved) && (isReload || savedPage === window.location.pathname)) {
+                // Find nav link by matching onclick attribute
+                let navLink = null;
+                document.querySelectorAll('.nav-items a').forEach(a => {
+                    const oc = a.getAttribute('onclick') || '';
+                    if (oc.includes(`'${saved}'`) || oc.includes(`"${saved}"`)) {
+                        navLink = a;
+                    }
+                });
                 showSection(saved, navLink);
             }
 
             document.querySelectorAll('tbody tr').forEach(row => {
                 row.style.cursor = 'pointer';
                 row.style.transition = 'all 0.3s ease';
-                row.addEventListener('mouseenter', function() {
-                    this.style.transform = 'translateX(5px)';
-                });
-                row.addEventListener('mouseleave', function() {
-                    this.style.transform = 'translateX(0)';
-                });
+                row.addEventListener('mouseenter', function() { this.style.transform = 'translateX(5px)'; });
+                row.addEventListener('mouseleave', function() { this.style.transform = 'translateX(0)'; });
             });
         });
 

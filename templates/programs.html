@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programs - Elite Cricket Academy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --secondary: #3b82f6;
+            --accent: #f59e0b;
+            --text-dark: #1f2937;
+            --text-muted: #6b7280;
+            --surface: #ffffff;
+            --border: #e5e7eb;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Poppins',sans-serif; background:linear-gradient(135deg,#f9fafb,#f0fdf4); color:var(--text-dark); }
+
+        @keyframes slideDown { from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes slideUp   { from{opacity:0;transform:translateY(30px)}  to{opacity:1;transform:translateY(0)} }
+
+        header {
+            background:linear-gradient(135deg,#fff,#f0fdf4);
+            padding:16px 40px; display:flex; justify-content:space-between; align-items:center;
+            box-shadow:0 4px 20px rgba(0,0,0,.08);
+            position:sticky; top:0; z-index:100;
+            animation:slideDown .6s ease-out;
+        }
+        header .logo { font-size:22px; font-weight:700; background:linear-gradient(135deg,var(--primary),var(--primary-dark)); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+        header nav { display:flex; gap:24px; align-items:center; }
+        header nav a { text-decoration:none; color:var(--text-muted); font-size:14px; font-weight:500; transition:color .2s; position:relative; padding:6px 0; }
+        header nav a::before { content:''; position:absolute; bottom:0; left:0; width:0; height:2px; background:var(--primary); transition:width .3s; }
+        header nav a:hover { color:var(--primary); }
+        header nav a:hover::before { width:100%; }
+        header nav a.btn-nav { background:linear-gradient(135deg,var(--primary),var(--primary-dark)); color:white; padding:9px 20px; border-radius:10px; font-weight:600; }
+        header nav a.btn-nav::before { display:none; }
+
+        /* PAGE HEADER */
+        .page-hero {
+            text-align:center; padding:72px 20px 56px;
+            animation:slideDown .6s ease-out .1s both;
+        }
+        .page-hero h1 {
+            font-size:48px; font-weight:800;
+            background:linear-gradient(135deg,var(--text-dark),var(--primary));
+            -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+            margin-bottom:12px;
+        }
+        .page-hero p { color:var(--text-muted); font-size:17px; max-width:580px; margin:0 auto; }
+
+        /* PROGRAMS */
+        .programs-section { max-width:1100px; margin:0 auto; padding:0 24px 80px; }
+
+        .program-card {
+            background:var(--surface); border-radius:24px;
+            overflow:hidden; margin-bottom:40px;
+            box-shadow:0 12px 40px rgba(0,0,0,.08);
+            display:grid; grid-template-columns:380px 1fr;
+            transition:transform .3s, box-shadow .3s;
+            animation:slideUp .6s ease-out both;
+        }
+        .program-card:hover { transform:translateY(-8px); box-shadow:0 24px 60px rgba(16,185,129,.15); }
+        .program-card:nth-child(even) { grid-template-columns:1fr 380px; }
+        .program-card:nth-child(even) .prog-img { order:2; }
+        .program-card:nth-child(even) .prog-body { order:1; }
+
+        .prog-img img { width:100%; height:100%; min-height:300px; object-fit:cover; display:block; transition:transform .4s; }
+        .program-card:hover .prog-img img { transform:scale(1.05); }
+
+        .prog-body { padding:40px; display:flex; flex-direction:column; justify-content:center; }
+
+        .prog-badge {
+            display:inline-block; padding:5px 16px; border-radius:20px;
+            font-size:12px; font-weight:700; margin-bottom:16px;
+            width:fit-content;
+        }
+        .badge-beginner    { background:rgba(16,185,129,.12); color:var(--primary-dark); }
+        .badge-intermediate{ background:rgba(59,130,246,.12); color:#1d4ed8; }
+        .badge-advanced    { background:rgba(245,158,11,.12); color:#b45309; }
+        .badge-elite       { background:rgba(139,92,246,.12); color:#6d28d9; }
+
+        .prog-body h2 { font-size:26px; font-weight:800; margin-bottom:12px; color:var(--text-dark); }
+        .prog-body .desc { color:var(--text-muted); font-size:14px; line-height:1.8; margin-bottom:20px; }
+
+        .features { list-style:none; margin-bottom:28px; display:flex; flex-direction:column; gap:8px; }
+        .features li { display:flex; align-items:center; gap:10px; font-size:14px; color:var(--text-dark); }
+        .features li::before { content:'✓'; width:22px; height:22px; background:var(--primary); color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0; }
+
+        .prog-footer { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; }
+        .prog-price { font-size:22px; font-weight:800; color:var(--primary); }
+        .prog-price span { font-size:13px; color:var(--text-muted); font-weight:400; }
+        .enroll-btn {
+            padding:12px 28px; background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+            color:white; text-decoration:none; border-radius:12px;
+            font-size:14px; font-weight:700;
+            box-shadow:0 6px 20px rgba(16,185,129,.3);
+            transition:transform .2s, box-shadow .2s;
+        }
+        .enroll-btn:hover { transform:translateY(-2px); box-shadow:0 12px 28px rgba(16,185,129,.4); }
+
+        /* COMPARISON TABLE */
+        .compare-section { max-width:1100px; margin:0 auto; padding:0 24px 80px; }
+        .compare-section h2 {
+            font-size:32px; font-weight:800; text-align:center; margin-bottom:8px;
+            background:linear-gradient(135deg,var(--text-dark),var(--primary));
+            -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+        }
+        .compare-section p { text-align:center; color:var(--text-muted); margin-bottom:36px; }
+
+        .compare-table { width:100%; border-collapse:collapse; background:var(--surface); border-radius:16px; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,.07); }
+        .compare-table th { background:linear-gradient(135deg,var(--primary),var(--primary-dark)); color:white; padding:16px 20px; text-align:center; font-size:14px; font-weight:700; }
+        .compare-table th:first-child { text-align:left; }
+        .compare-table td { padding:14px 20px; border-bottom:1px solid var(--border); font-size:14px; text-align:center; }
+        .compare-table td:first-child { text-align:left; font-weight:600; color:var(--text-dark); }
+        .compare-table tr:last-child td { border-bottom:none; }
+        .compare-table tr:hover td { background:rgba(16,185,129,.04); }
+        .check { color:var(--primary); font-size:18px; }
+        .cross { color:#d1d5db; font-size:18px; }
+
+        /* FAQ */
+        .faq-section { max-width:800px; margin:0 auto; padding:0 24px 80px; }
+        .faq-section h2 { font-size:32px; font-weight:800; text-align:center; margin-bottom:8px; background:linear-gradient(135deg,var(--text-dark),var(--primary)); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+        .faq-section p { text-align:center; color:var(--text-muted); margin-bottom:36px; }
+
+        .faq-item { background:var(--surface); border-radius:14px; margin-bottom:12px; box-shadow:0 4px 16px rgba(0,0,0,.05); overflow:hidden; }
+        .faq-q { padding:18px 24px; font-weight:600; font-size:15px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:color .2s; }
+        .faq-q:hover { color:var(--primary); }
+        .faq-q .arrow { transition:transform .3s; font-size:18px; }
+        .faq-q.open .arrow { transform:rotate(180deg); }
+        .faq-a { padding:0 24px; max-height:0; overflow:hidden; transition:max-height .3s ease, padding .3s; color:var(--text-muted); font-size:14px; line-height:1.7; }
+        .faq-a.open { max-height:200px; padding:0 24px 18px; }
+
+        /* CTA */
+        .cta { background:linear-gradient(135deg,var(--primary),var(--primary-dark)); padding:72px 40px; text-align:center; color:white; }
+        .cta h2 { font-size:36px; font-weight:800; margin-bottom:12px; }
+        .cta p  { opacity:.85; font-size:16px; margin-bottom:28px; }
+        .cta a  { display:inline-block; padding:15px 40px; background:white; color:var(--primary-dark); border-radius:14px; font-size:16px; font-weight:700; text-decoration:none; box-shadow:0 8px 24px rgba(0,0,0,.15); transition:transform .2s; }
+        .cta a:hover { transform:translateY(-3px); }
+
+        footer { text-align:center; padding:20px; background:var(--surface); border-top:1px solid var(--border); color:var(--text-muted); font-size:13px; }
+
+        @media(max-width:900px) {
+            .program-card, .program-card:nth-child(even) { grid-template-columns:1fr; }
+            .program-card:nth-child(even) .prog-img, .program-card:nth-child(even) .prog-body { order:unset; }
+            .prog-img img { min-height:220px; }
+            header { flex-direction:column; gap:12px; padding:12px 16px; }
+            .page-hero h1 { font-size:32px; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo"><a href="/dashboard_user" style="text-decoration:none;"><img src="/static/images/logo.png" alt="Elite Cricket Academy" style="height:48px; width:auto; object-fit:contain;"></a></div>
+    <nav>
+        <a href="/dashboard_user">Home</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+        <a href="/store">Shop</a>
+        <a href="/enroll" class="btn-nav">Enroll Now</a>
+    </nav>
+</header>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+    <h1>🎓 Our Training Programs</h1>
+    <p>Choose the program that matches your skill level and ambition. Every journey starts with a single step.</p>
+</div>
+
+<!-- PROGRAMS -->
+<div class="programs-section">
+
+    <!-- Beginner -->
+    <div class="program-card" style="animation-delay:.1s">
+        <div class="prog-img">
+            <img src="{{ url_for('static', filename='images/about_1.jpeg') }}" alt="Beginner">
+        </div>
+        <div class="prog-body">
+            <span class="prog-badge badge-beginner">🌱 Beginner</span>
+            <h2>Foundation Program</h2>
+            <p class="desc">Perfect for those new to cricket. Build a solid foundation in batting, bowling, and fielding fundamentals with patient, expert guidance.</p>
+            <ul class="features">
+                <li>Basic batting stance & grip</li>
+                <li>Introduction to bowling techniques</li>
+                <li>Fielding & catching drills</li>
+                <li>Cricket rules & match awareness</li>
+                <li>3 sessions per week</li>
+            </ul>
+            <div class="prog-footer">
+                <div class="prog-price">₹2,500 <span>/ month</span></div>
+                <a href="/enroll" class="enroll-btn">Enroll Now →</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Intermediate -->
+    <div class="program-card" style="animation-delay:.2s">
+        <div class="prog-img">
+            <img src="{{ url_for('static', filename='images/about_2.jpeg') }}" alt="Intermediate">
+        </div>
+        <div class="prog-body">
+            <span class="prog-badge badge-intermediate">💪 Intermediate</span>
+            <h2>Development Program</h2>
+            <p class="desc">For players with basic knowledge looking to sharpen their skills. Focus on technique refinement, match situations, and tactical awareness.</p>
+            <ul class="features">
+                <li>Advanced batting shots & footwork</li>
+                <li>Pace & spin bowling variations</li>
+                <li>Wicket-keeping fundamentals</li>
+                <li>Match simulation & strategy</li>
+                <li>5 sessions per week + weekend match</li>
+            </ul>
+            <div class="prog-footer">
+                <div class="prog-price">₹4,500 <span>/ month</span></div>
+                <a href="/enroll" class="enroll-btn">Enroll Now →</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Advanced -->
+    <div class="program-card" style="animation-delay:.3s">
+        <div class="prog-img">
+            <img src="{{ url_for('static', filename='images/about_3.jpeg') }}" alt="Advanced">
+        </div>
+        <div class="prog-body">
+            <span class="prog-badge badge-advanced">⭐ Advanced</span>
+            <h2>Performance Program</h2>
+            <p class="desc">Designed for serious players targeting district and state-level cricket. Intensive training with video analysis and personalized coaching plans.</p>
+            <ul class="features">
+                <li>Video analysis & technique correction</li>
+                <li>Mental conditioning & pressure training</li>
+                <li>Fitness & strength conditioning</li>
+                <li>Tournament preparation</li>
+                <li>Daily sessions + trial matches</li>
+            </ul>
+            <div class="prog-footer">
+                <div class="prog-price">₹7,500 <span>/ month</span></div>
+                <a href="/enroll" class="enroll-btn">Enroll Now →</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Elite -->
+    <div class="program-card" style="animation-delay:.4s">
+        <div class="prog-img">
+            <img src="{{ url_for('static', filename='images/user_cricket.jpeg') }}" alt="Elite">
+        </div>
+        <div class="prog-body">
+            <span class="prog-badge badge-elite">🏆 Elite</span>
+            <h2>Elite Scholarship Program</h2>
+            <p class="desc">By invitation only. For exceptional talent identified by our coaches. Full scholarship with professional-level training and state trial support.</p>
+            <ul class="features">
+                <li>1-on-1 coaching with head coach</li>
+                <li>Full performance analytics dashboard</li>
+                <li>Nutrition & recovery planning</li>
+                <li>State & national trial preparation</li>
+                <li>Scholarship — fees waived for selected players</li>
+            </ul>
+            <div class="prog-footer">
+                <div class="prog-price">By Selection <span>/ contact us</span></div>
+                <a href="/contact" class="enroll-btn">Contact Us →</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- COMPARISON TABLE -->
+<div class="compare-section">
+    <h2>Compare Programs</h2>
+    <p>Find the right fit for your cricket journey</p>
+    <table class="compare-table">
+        <thead>
+            <tr>
+                <th>Feature</th>
+                <th>🌱 Beginner</th>
+                <th>💪 Intermediate</th>
+                <th>⭐ Advanced</th>
+                <th>🏆 Elite</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Sessions per week</td><td>3</td><td>5</td><td>6</td><td>Daily</td></tr>
+            <tr><td>Video Analysis</td><td class="cross">✗</td><td class="cross">✗</td><td class="check">✓</td><td class="check">✓</td></tr>
+            <tr><td>1-on-1 Coaching</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td><td class="check">✓</td></tr>
+            <tr><td>Fitness Training</td><td class="cross">✗</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+            <tr><td>Match Simulation</td><td class="cross">✗</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+            <tr><td>Performance Analytics</td><td class="cross">✗</td><td class="cross">✗</td><td class="check">✓</td><td class="check">✓</td></tr>
+            <tr><td>Tournament Support</td><td class="cross">✗</td><td class="cross">✗</td><td class="check">✓</td><td class="check">✓</td></tr>
+            <tr><td>Monthly Fee</td><td>₹2,500</td><td>₹4,500</td><td>₹7,500</td><td>Scholarship</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- FAQ -->
+<div class="faq-section">
+    <h2>Frequently Asked Questions</h2>
+    <p>Everything you need to know before enrolling</p>
+
+    <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">What age groups do you accept? <span class="arrow">▾</span></div>
+        <div class="faq-a">We accept students from age 8 to 25. Our beginner program is ideal for younger students, while the advanced and elite programs cater to older, more experienced players.</div>
+    </div>
+    <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Do I need prior cricket experience? <span class="arrow">▾</span></div>
+        <div class="faq-a">Not at all! Our Foundation (Beginner) program is designed for complete beginners. Our coaches will assess your current level and place you in the right batch.</div>
+    </div>
+    <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">What equipment do I need to bring? <span class="arrow">▾</span></div>
+        <div class="faq-a">For beginners, just comfortable sportswear and shoes. We provide basic equipment. Intermediate and advanced students are encouraged to have their own bat and pads. Check our store for gear.</div>
+    </div>
+    <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Can I switch programs later? <span class="arrow">▾</span></div>
+        <div class="faq-a">Absolutely. Our coaches regularly assess student progress and recommend program upgrades. You can move up at any time based on your development.</div>
+    </div>
+    <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Is there a trial session available? <span class="arrow">▾</span></div>
+        <div class="faq-a">Yes! We offer a free trial session for new students. Contact us or fill out the enrollment form and mention you'd like a trial session.</div>
+    </div>
+</div>
+
+<!-- CTA -->
+<div class="cta">
+    <h2>Start Your Cricket Journey Today</h2>
+    <p>Join Elite Cricket Academy and take the first step towards your cricket dreams.</p>
+    <a href="/enroll">🚀 Enroll Now — It's Free to Apply</a>
+</div>
+
+<footer>© 2026 Elite Cricket Academy | All Rights Reserved</footer>
+
+<script>
+function toggleFaq(el) {
+    el.classList.toggle('open');
+    const ans = el.nextElementSibling;
+    ans.classList.toggle('open');
+}
+</script>
+
+</body>
+</html>

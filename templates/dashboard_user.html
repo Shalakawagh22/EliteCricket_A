@@ -717,7 +717,9 @@
 <!-- HEADER -->
 <header class="navbar">
     <div class="logo">
-        <h2>🏏 Elite Cricket Academy</h2>
+        <a href="/dashboard_user" style="text-decoration:none;">
+            <img src="/static/images/logo.png" alt="Elite Cricket Academy" style="height:52px; width:auto; object-fit:contain;">
+        </a>
     </div>
 
     <nav>
@@ -727,6 +729,7 @@
         <a href="/contact">Contact</a>
         <a href="/gamezone">Game Zone</a>
         <a href="/store">Shop</a>
+        <a href="/training_schedule">Schedule</a>
         {% if session.get('user') %}
         <a href="#profile">My Profile</a>
         <a href="/logout" class="login-btn">Logout</a>
@@ -786,14 +789,14 @@
                     <div class="icon">📅</div>
                     <h3>My Training Schedule</h3>
                     <p>View and manage your personalized training sessions</p>
-                    <a href="#">👉 View Schedule</a>
+                    <a href="/training_schedule">👉 View Schedule</a>
                 </div>
 
                 <div class="card">
                     <div class="icon">📊</div>
                     <h3>Performance Analytics</h3>
                     <p>Track your progress with detailed performance metrics</p>
-                    <a href="#">👉 View Analytics</a>
+                    <a href="/my_performance">👉 View Analytics</a>
                 </div>
 
                 <div class="card">
@@ -1094,11 +1097,17 @@
         localStorage.setItem('userScrollPos', window.scrollY);
     });
 
-    // Restore scroll position on load
+    // Restore scroll position only on same-page refresh (not navigation from other pages)
     window.addEventListener('load', function() {
-        const saved = localStorage.getItem('userScrollPos');
-        if (saved) {
-            window.scrollTo({ top: parseInt(saved), behavior: 'instant' });
+        // Only restore if navigationType is reload (not navigate)
+        const navEntry = performance.getEntriesByType('navigation')[0];
+        if (navEntry && navEntry.type === 'reload') {
+            const saved = localStorage.getItem('userScrollPos');
+            if (saved) {
+                window.scrollTo({ top: parseInt(saved), behavior: 'instant' });
+            }
+        } else {
+            localStorage.removeItem('userScrollPos');
         }
     });
 </script>

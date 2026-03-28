@@ -384,9 +384,13 @@
 <body>
     <!-- Header -->
     <header class="main-header">
-        <div class="logo">🏏 Cricket Store</div>
+        <div class="logo">
+            <a href="/dashboard_user" style="text-decoration:none;">
+                <img src="/static/images/logo.png" alt="Elite Cricket Academy" style="height:44px; width:auto; object-fit:contain;">
+            </a>
+        </div>
         <nav>
-            <a href="{{ url_for('homepage') }}">Home</a>
+            <a href="/dashboard_user">Home</a>
             <a href="{{ url_for('store') }}">Store</a>
             <a href="{{ url_for('cart_page') }}">Cart</a>
         </nav>
@@ -448,7 +452,7 @@
             <!-- Payment Method -->
             <div class="payment-box">
                 <h2>💳 Payment Method</h2>
-                <form method="POST" action="/checkout" onsubmit="return handleCheckout(event)">
+                <form method="POST" action="/checkout">
                     <div class="payment-options">
                         <label class="payment-option">
                             <input type="radio" name="payment_method" value="COD" required>
@@ -469,9 +473,9 @@
 
                     <button type="submit" class="btn" id="payBtn">Complete Purchase ✓</button>
                 </form>
-            </div>
+            </div><!-- payment-box -->
         {% endif %}
-    </div>
+    </div><!-- container -->
 
     <!-- Footer -->
     <footer class="main-footer">
@@ -487,36 +491,6 @@ document.querySelectorAll('.payment-option').forEach(option => {
         option.querySelector('input').checked = true;
     });
 });
-
-function handleCheckout(event) {
-    event.preventDefault();
-
-    let selected = document.querySelector('input[name="payment_method"]:checked');
-    if (!selected) {
-        alert("Please select payment method");
-        return false;
-    }
-
-    const method = selected.value;
-
-    if (method === "ONLINE") {
-        // go to payment page
-        window.location.href = "/payment";
-        return false;
-    }
-
-    // COD → submit directly
-    fetch("/checkout", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: "payment_method=COD"
-    })
-    .then(res => window.location.href = "/order_success");
-
-    return false;
-}
 </script>
 </body>
 </html>

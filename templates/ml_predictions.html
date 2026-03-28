@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML Player Predictions - Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg: #f5f7fa;
+            --surface: #ffffff;
+            --accent: #6366f1;
+            --accent2: #7e22ce;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Poppins',sans-serif; background:var(--bg); color:var(--text-main); min-height:100vh; }
+
+        @keyframes slideDown { from{opacity:0;transform:translateY(-16px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes slideUp   { from{opacity:0;transform:translateY(20px)}  to{opacity:1;transform:translateY(0)} }
+        @keyframes pop       { 0%{transform:scale(.8);opacity:0} 70%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+
+        header {
+            background:var(--surface); border-bottom:2px solid var(--border);
+            padding:16px 32px; display:flex; justify-content:space-between; align-items:center;
+            box-shadow:0 4px 20px rgba(0,0,0,.06);
+            animation:slideDown .5s ease-out;
+        }
+        header .logo { font-size:20px; font-weight:700; background:linear-gradient(135deg,var(--accent),var(--accent2)); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+        header nav { display:flex; gap:16px; }
+        header nav a { text-decoration:none; color:var(--text-muted); font-size:13px; font-weight:500; padding:8px 14px; border-radius:8px; transition:all .2s; }
+        header nav a:hover { background:rgba(99,102,241,.08); color:var(--accent); }
+        header nav a.active { background:linear-gradient(135deg,var(--accent),var(--accent2)); color:white; }
+
+        .main { max-width:1200px; margin:0 auto; padding:40px 24px 80px; }
+
+        /* PAGE TITLE */
+        .page-title {
+            display:flex; align-items:center; gap:16px; margin-bottom:36px;
+            animation:slideDown .5s ease-out .1s both;
+        }
+        .title-icon {
+            width:56px; height:56px; border-radius:16px;
+            background:linear-gradient(135deg,var(--accent),var(--accent2));
+            display:flex; align-items:center; justify-content:center;
+            font-size:26px; box-shadow:0 8px 24px rgba(99,102,241,.3);
+        }
+        .page-title h1 { font-size:28px; font-weight:800; }
+        .page-title p  { font-size:13px; color:var(--text-muted); margin-top:2px; }
+
+        /* SUMMARY CARDS */
+        .summary { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:18px; margin-bottom:32px; animation:slideUp .5s ease-out .15s both; }
+        .s-card {
+            background:var(--surface); border-radius:16px; padding:22px;
+            box-shadow:0 6px 20px rgba(0,0,0,.06); border-top:4px solid var(--accent);
+            text-align:center;
+        }
+        .s-card .s-val { font-size:36px; font-weight:800; background:linear-gradient(135deg,var(--accent),var(--accent2)); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+        .s-card .s-lbl { font-size:12px; color:var(--text-muted); font-weight:600; margin-top:4px; text-transform:uppercase; letter-spacing:.5px; }
+
+        /* CHARTS ROW */
+        .charts-row { display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:32px; animation:slideUp .5s ease-out .2s both; }
+        .chart-box { background:var(--surface); border-radius:16px; padding:24px; box-shadow:0 6px 20px rgba(0,0,0,.06); }
+        .chart-box h3 { font-size:14px; font-weight:700; margin-bottom:16px; color:var(--text-main); }
+        .chart-box canvas { max-height:260px; }
+
+        /* FEATURE IMPORTANCE */
+        .fi-bar { display:flex; align-items:center; gap:12px; margin-bottom:10px; }
+        .fi-label { width:90px; font-size:13px; font-weight:600; color:var(--text-main); }
+        .fi-track { flex:1; height:10px; background:var(--border); border-radius:5px; overflow:hidden; }
+        .fi-fill   { height:100%; border-radius:5px; background:linear-gradient(135deg,var(--accent),var(--accent2)); transition:width .8s ease; }
+        .fi-pct    { font-size:12px; font-weight:700; color:var(--accent); width:32px; text-align:right; }
+
+        /* PLAYER TABLE */
+        .table-card { background:var(--surface); border-radius:16px; overflow:hidden; box-shadow:0 6px 20px rgba(0,0,0,.06); animation:slideUp .5s ease-out .25s both; }
+        .table-header { padding:20px 24px; display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid var(--border); }
+        .table-header h3 { font-size:16px; font-weight:700; }
+
+        table { width:100%; border-collapse:collapse; }
+        th { background:linear-gradient(135deg,#f8fafc,#e2e8f0); color:var(--text-muted); font-weight:700; text-transform:uppercase; font-size:11px; letter-spacing:1px; padding:14px 18px; text-align:left; border-bottom:2px solid var(--accent); }
+        td { padding:14px 18px; border-bottom:1px solid var(--border); font-size:14px; }
+        tr:last-child td { border-bottom:none; }
+        tr:hover td { background:rgba(99,102,241,.04); }
+
+        /* Rank badge */
+        .rank { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:13px; }
+        .rank-1 { background:linear-gradient(135deg,#fbbf24,#f59e0b); color:white; box-shadow:0 4px 12px rgba(245,158,11,.4); }
+        .rank-2 { background:linear-gradient(135deg,#94a3b8,#64748b); color:white; }
+        .rank-3 { background:linear-gradient(135deg,#cd7c3a,#b45309); color:white; }
+        .rank-n { background:var(--border); color:var(--text-muted); }
+
+        /* Tier badge */
+        .tier { padding:4px 12px; border-radius:20px; font-size:11px; font-weight:700; }
+        .tier-Elite      { background:rgba(99,102,241,.12); color:var(--accent); border:1px solid rgba(99,102,241,.3); }
+        .tier-Developing { background:rgba(16,185,129,.12); color:#059669; border:1px solid rgba(16,185,129,.3); }
+        .tier-Beginner   { background:rgba(245,158,11,.12); color:#b45309; border:1px solid rgba(245,158,11,.3); }
+
+        /* Score bar */
+        .score-wrap { display:flex; align-items:center; gap:8px; }
+        .score-track { width:80px; height:8px; background:var(--border); border-radius:4px; overflow:hidden; }
+        .score-fill  { height:100%; border-radius:4px; background:linear-gradient(135deg,var(--accent),var(--accent2)); }
+        .score-num   { font-weight:700; font-size:14px; color:var(--accent); min-width:36px; }
+
+        /* No data */
+        .no-data { text-align:center; padding:80px 20px; color:var(--text-muted); }
+        .no-data .icon { font-size:52px; margin-bottom:14px; }
+        .no-data h3 { font-size:18px; font-weight:700; margin-bottom:6px; }
+
+        footer { text-align:center; padding:16px; background:var(--surface); border-top:1px solid var(--border); color:var(--text-muted); font-size:12px; margin-top:40px; }
+
+        @media(max-width:768px) {
+            .charts-row { grid-template-columns:1fr; }
+            header { flex-direction:column; gap:10px; padding:12px 16px; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo">
+        <a href="/dashboard_admin" style="text-decoration:none;">
+            <img src="/static/images/logo.png" alt="Elite Cricket Academy" style="height:44px; width:auto; object-fit:contain;">
+        </a>
+    </div>
+    <nav>
+        <a href="/dashboard_admin">← Dashboard</a>
+        
+        <a href="/logout">Logout</a>
+    </nav>
+</header>
+
+<div class="main">
+
+    <!-- Title -->
+    <div class="page-title">
+        <div class="title-icon">🤖</div>
+        <div>
+            <h1>ML Player Predictions</h1>
+            <p>KMeans clustering + weighted scoring — ranked by composite performance index</p>
+        </div>
+    </div>
+
+    {% if players %}
+
+    <!-- Summary -->
+    <div class="summary">
+        <div class="s-card">
+            <div class="s-val">{{ players|length }}</div>
+            <div class="s-lbl">Players Analysed</div>
+        </div>
+        <div class="s-card" style="border-top-color:#10b981">
+            <div class="s-val" style="background:linear-gradient(135deg,#10b981,#059669); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;">
+                {{ players | selectattr('tier','equalto','Elite') | list | length }}
+            </div>
+            <div class="s-lbl">Elite Players</div>
+        </div>
+        <div class="s-card" style="border-top-color:#f59e0b">
+            <div class="s-val" style="background:linear-gradient(135deg,#f59e0b,#d97706); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;">
+                {{ players[0].score if players else 0 }}
+            </div>
+            <div class="s-lbl">Top Score</div>
+        </div>
+        <div class="s-card" style="border-top-color:#3b82f6">
+            <div class="s-val" style="background:linear-gradient(135deg,#3b82f6,#2563eb); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;">
+                {{ ((players | sum(attribute='score')) / players|length) | round(1) if players else 0 }}
+            </div>
+            <div class="s-lbl">Avg Score</div>
+        </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="charts-row">
+        <!-- Score bar chart -->
+        <div class="chart-box">
+            <h3>📊 Player Score Ranking</h3>
+            <canvas id="scoreChart"></canvas>
+        </div>
+
+        <!-- Feature importance -->
+        <div class="chart-box">
+            <h3>⚖️ Model Feature Weights</h3>
+            <div style="margin-top:8px;">
+                {% for f in feature_importance %}
+                <div class="fi-bar">
+                    <span class="fi-label">{{ f.feature }}</span>
+                    <div class="fi-track"><div class="fi-fill" data-w="{{ f.weight * 3.33 }}"></div></div>
+                    <span class="fi-pct">{{ f.weight }}%</span>
+                </div>
+                {% endfor %}
+            </div>
+            <div style="margin-top:20px;">
+                <h3 style="margin-bottom:12px;">🏷️ Tier Distribution</h3>
+                <canvas id="tierChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Player Table -->
+    <div class="table-card">
+        <div class="table-header">
+            <h3>🏆 Player Rankings</h3>
+            <span style="font-size:12px; color:var(--text-muted);">Sorted by composite ML score</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Player</th>
+                    <th>Tier</th>
+                    <th>Score</th>
+                    <th>Batting</th>
+                    <th>Bowling</th>
+                    <th>Fielding</th>
+                    <th>Fitness</th>
+                    <th>Sessions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in players %}
+                <tr>
+                    <td>
+                        <div class="rank {% if loop.index == 1 %}rank-1{% elif loop.index == 2 %}rank-2{% elif loop.index == 3 %}rank-3{% else %}rank-n{% endif %}">
+                            {% if loop.index == 1 %}🥇{% elif loop.index == 2 %}🥈{% elif loop.index == 3 %}🥉{% else %}{{ loop.index }}{% endif %}
+                        </div>
+                    </td>
+                    <td>
+                        <div style="font-weight:700;">{{ p.name }}</div>
+                        <div style="font-size:11px; color:var(--text-muted);">{{ p._id }}</div>
+                    </td>
+                    <td><span class="tier tier-{{ p.tier }}">{{ p.tier }}</span></td>
+                    <td>
+                        <div class="score-wrap">
+                            <span class="score-num">{{ p.score }}</span>
+                            <div class="score-track"><div class="score-fill" data-w="{{ p.score }}"></div></div>
+                        </div>
+                    </td>
+                    <td>{{ p.avg_batting }}</td>
+                    <td>{{ p.avg_bowling }}</td>
+                    <td>{{ p.avg_fielding }}</td>
+                    <td>{{ p.avg_fitness }}</td>
+                    <td>{{ p.sessions }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% else %}
+    <div class="no-data">
+        <div class="icon">🤖</div>
+        <h3>Not enough data yet</h3>
+        <p>Add performance records for at least 2 players to generate ML predictions.</p>
+        <a href="/dashboard_admin#performance" style="display:inline-block; margin-top:16px; padding:10px 24px; background:linear-gradient(135deg,var(--accent),var(--accent2)); color:white; border-radius:10px; text-decoration:none; font-weight:600; font-size:14px;">Add Performance Data →</a>
+    </div>
+    {% endif %}
+
+</div>
+
+<footer>© 2026 Elite Cricket Academy | ML Predictions powered by scikit-learn KMeans</footer>
+
+{% if players %}
+<div id="chartData"
+    data-names='{{ players | map(attribute="name") | list | tojson }}'
+    data-scores='{{ players | map(attribute="score") | list | tojson }}'
+    data-tiers='{{ players | map(attribute="tier") | list | tojson }}'
+    style="display:none"></div>
+
+<script>
+const cd     = document.getElementById('chartData').dataset;
+const names  = JSON.parse(cd.names);
+const scores = JSON.parse(cd.scores);
+const tiers  = JSON.parse(cd.tiers);
+
+// Score bar chart
+new Chart(document.getElementById('scoreChart'), {
+    type: 'bar',
+    data: {
+        labels: names,
+        datasets: [{
+            data: scores,
+            backgroundColor: scores.map((s, i) =>
+                i === 0 ? 'rgba(251,191,36,.85)' :
+                i === 1 ? 'rgba(148,163,184,.85)' :
+                i === 2 ? 'rgba(205,124,58,.85)' :
+                          'rgba(99,102,241,.7)'
+            ),
+            borderRadius: 8,
+            borderSkipped: false
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: { legend: { display: false } },
+        scales: {
+            y: { beginAtZero: true, max: 100, grid: { color: '#f1f5f9' }, ticks: { color: '#64748b' } },
+            x: { grid: { display: false }, ticks: { color: '#64748b', maxRotation: 30 } }
+        }
+    }
+});
+
+// Tier doughnut
+const tierCounts = { Elite: 0, Developing: 0, Beginner: 0 };
+tiers.forEach(t => { if (tierCounts[t] !== undefined) tierCounts[t]++; });
+
+new Chart(document.getElementById('tierChart'), {
+    type: 'doughnut',
+    data: {
+        labels: ['Elite', 'Developing', 'Beginner'],
+        datasets: [{
+            data: [tierCounts.Elite, tierCounts.Developing, tierCounts.Beginner],
+            backgroundColor: ['rgba(99,102,241,.8)', 'rgba(16,185,129,.8)', 'rgba(245,158,11,.8)'],
+            borderWidth: 0,
+            hoverOffset: 4
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+            legend: { position: 'bottom', labels: { color: '#1e293b', padding: 12, font: { family: 'Poppins' } } }
+        }
+    }
+});
+</script>
+{% endif %}
+
+<script>
+// Apply data-w widths to all bar fills
+document.querySelectorAll('[data-w]').forEach(el => {
+    el.style.width = el.dataset.w + '%';
+});
+</script>
+
+</body>
+</html>

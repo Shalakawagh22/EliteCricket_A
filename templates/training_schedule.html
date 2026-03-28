@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Training Schedule - Elite Cricket Academy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --secondary: #3b82f6;
+            --text-dark: #1f2937;
+            --text-muted: #6b7280;
+            --bg-light: #f9fafb;
+            --surface: #ffffff;
+            --border: #e5e7eb;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f9fafb 0%, #f0fdf4 100%);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes slideDown { from { opacity:0; transform:translateY(-20px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes slideUp   { from { opacity:0; transform:translateY(20px);  } to { opacity:1; transform:translateY(0); } }
+
+        header {
+            background: linear-gradient(135deg, var(--surface), #f0fdf4);
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        header .logo {
+            font-size: 22px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header nav { display: flex; gap: 20px; align-items: center; }
+        header nav a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 500;
+            font-size: 14px;
+            transition: color 0.2s;
+            position: relative;
+            padding: 6px 0;
+        }
+        header nav a::before {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 0; height: 2px;
+            background: var(--primary);
+            transition: width 0.3s;
+        }
+        header nav a:hover { color: var(--primary); }
+        header nav a:hover::before { width: 100%; }
+
+        .main {
+            flex: 1;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 48px 24px 64px;
+            width: 100%;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: slideDown 0.6s ease-out 0.1s both;
+        }
+
+        .page-header h1 {
+            font-size: 40px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--text-dark), var(--primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .page-header p { color: var(--text-muted); font-size: 15px; }
+
+        /* Filter tabs */
+        .filter-tabs {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 32px;
+            animation: slideUp 0.6s ease-out 0.15s both;
+        }
+
+        .tab {
+            padding: 8px 20px;
+            border-radius: 20px;
+            border: 2px solid var(--border);
+            background: var(--surface);
+            color: var(--text-muted);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .tab:hover, .tab.active {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 4px 14px rgba(16,185,129,0.3);
+        }
+
+        /* Schedule grid */
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .schedule-card {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+            border-left: 4px solid var(--primary);
+            transition: all 0.3s ease;
+            animation: slideUp 0.6s ease-out both;
+        }
+
+        .schedule-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 40px rgba(16,185,129,0.15);
+        }
+
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 14px;
+        }
+
+        .card-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .batch-badge {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .card-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .meta-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .meta-row .icon { font-size: 15px; }
+        .meta-row span { font-weight: 500; color: var(--text-dark); }
+
+        .notes-row {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+            font-size: 13px;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            background: var(--surface);
+            border-radius: 20px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+            animation: slideUp 0.6s ease-out;
+        }
+
+        .empty-state .icon { font-size: 56px; margin-bottom: 16px; }
+        .empty-state h3 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+        .empty-state p { color: var(--text-muted); font-size: 14px; }
+
+        footer {
+            text-align: center;
+            padding: 16px;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        @media (max-width: 768px) {
+            header { flex-direction: column; gap: 12px; padding: 12px 16px; }
+            .page-header h1 { font-size: 28px; }
+            .schedule-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo"><a href="/dashboard_user" style="text-decoration:none;"><img src="/static/images/logo.png" alt="Elite Cricket Academy" style="height:48px; width:auto; object-fit:contain;"></a></div>
+    <nav>
+        <a href="/dashboard_user">Home</a>
+        <a href="/enroll">Enroll</a>
+        <a href="/store">Shop</a>
+        <a href="/logout">Logout</a>
+    </nav>
+</header>
+
+<div class="main">
+
+    <div class="page-header">
+        <h1>📅 Training Schedule</h1>
+        <p>Your upcoming cricket training sessions — stay on track and never miss a session!</p>
+    </div>
+
+    <!-- Filter tabs -->
+    <div class="filter-tabs">
+        <button class="tab active" onclick="filterBatch('All', this)">All Batches</button>
+        <button class="tab" onclick="filterBatch('Beginner', this)">🌱 Beginner</button>
+        <button class="tab" onclick="filterBatch('Intermediate', this)">💪 Intermediate</button>
+        <button class="tab" onclick="filterBatch('Advanced', this)">⭐ Advanced</button>
+    </div>
+
+    {% if schedules %}
+    <div class="schedule-grid" id="scheduleGrid">
+        {% for s in schedules %}
+        <div class="schedule-card" data-batch="{{ s.batch }}">
+            <div class="card-top">
+                <div class="card-title">{{ s.title }}</div>
+                <span class="batch-badge">{{ s.batch }}</span>
+            </div>
+            <div class="card-meta">
+                <div class="meta-row">
+                    <span class="icon">📆</span>
+                    <span>{{ s.date }}</span>
+                </div>
+                <div class="meta-row">
+                    <span class="icon">🕐</span>
+                    <span>{{ s.time }}{% if s.duration %} &nbsp;·&nbsp; {{ s.duration }}{% endif %}</span>
+                </div>
+                {% if s.coach %}
+                <div class="meta-row">
+                    <span class="icon">👨‍🏫</span>
+                    <span>{{ s.coach }}</span>
+                </div>
+                {% endif %}
+            </div>
+            {% if s.notes %}
+            <div class="notes-row">📝 {{ s.notes }}</div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="icon">📅</div>
+        <h3>No sessions scheduled yet</h3>
+        <p>Check back soon — your coach will add training sessions here.</p>
+    </div>
+    {% endif %}
+
+</div>
+
+<footer>© 2026 Elite Cricket Academy | All Rights Reserved</footer>
+
+<script>
+function filterBatch(batch, btn) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+
+    document.querySelectorAll('.schedule-card').forEach(card => {
+        const cardBatch = card.dataset.batch;
+        card.style.display = (batch === 'All' || cardBatch === batch || cardBatch === 'All') ? 'block' : 'none';
+    });
+}
+</script>
+
+</body>
+</html>

@@ -1,237 +1,237 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Order Success</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmed - Elite Cricket Academy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --text-dark: #1f2937;
+            --text-muted: #6b7280;
+            --surface: #ffffff;
+            --border: #e5e7eb;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family:'Poppins',sans-serif;
+            background:linear-gradient(135deg,#f9fafb,#f0fdf4);
+            min-height:100vh;
+            display:flex;
+            flex-direction:column;
+        }
 
-<style>
+        @keyframes slideDown { from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes slideUp   { from{opacity:0;transform:translateY(20px)}  to{opacity:1;transform:translateY(0)} }
+        @keyframes pop       { 0%{transform:scale(.4);opacity:0} 70%{transform:scale(1.15)} 100%{transform:scale(1);opacity:1} }
 
-/* ===== BODY ===== */
-body {
-    margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg, #f5f7fa, #e4ecf3);
-    color: #333;
-}
+        header {
+            background:linear-gradient(135deg,#fff,#f0fdf4);
+            padding:16px 32px;
+            display:flex; justify-content:space-between; align-items:center;
+            box-shadow:0 4px 20px rgba(0,0,0,.08);
+            animation:slideDown .6s ease-out;
+        }
+        header .logo {
+            font-size:22px; font-weight:700;
+            background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+            -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+        }
+        header nav { display:flex; gap:20px; }
+        header nav a { text-decoration:none; color:var(--text-muted); font-size:14px; font-weight:500; transition:color .2s; }
+        header nav a:hover { color:var(--primary); }
 
-/* ===== HEADER ===== */
-.main-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 40px;
-    background: white;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-}
+        .main {
+            flex:1;
+            padding:48px 20px 64px;
+            max-width:720px;
+            margin:0 auto;
+            width:100%;
+        }
 
-.logo {
-    font-size: 22px;
-    font-weight: bold;
-}
+        .success-banner {
+            background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+            border-radius:20px;
+            padding:36px;
+            text-align:center;
+            color:white;
+            margin-bottom:24px;
+            animation:slideUp .6s ease-out;
+            box-shadow:0 16px 40px rgba(16,185,129,.25);
+        }
+        .check-icon { font-size:60px; display:block; margin-bottom:12px; animation:pop .6s ease-out .2s both; }
+        .success-banner h1 { font-size:26px; font-weight:800; margin-bottom:8px; }
+        .success-banner p  { font-size:14px; opacity:.85; }
+        .order-meta { display:flex; gap:10px; margin-top:16px; justify-content:center; flex-wrap:wrap; }
+        .meta-chip {
+            background:rgba(255,255,255,.2);
+            border:1px solid rgba(255,255,255,.3);
+            padding:6px 16px; border-radius:20px;
+            font-size:13px; font-weight:600;
+        }
 
-.logo span {
-    color: #ff9800;
-}
+        .section {
+            background:var(--surface);
+            border-radius:16px;
+            padding:28px;
+            margin-bottom:20px;
+            box-shadow:0 8px 24px rgba(0,0,0,.06);
+            animation:slideUp .6s ease-out .1s both;
+        }
+        .section h3 {
+            font-size:16px; font-weight:700; color:var(--text-dark);
+            margin-bottom:18px; padding-bottom:12px;
+            border-bottom:2px solid var(--border);
+        }
 
-nav a {
-    margin-left: 20px;
-    text-decoration: none;
-    color: #555;
-}
+        table { width:100%; border-collapse:collapse; }
+        th {
+            background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+            color:white; padding:12px 14px;
+            text-align:left; font-size:13px; font-weight:600;
+        }
+        th:first-child { border-radius:8px 0 0 0; }
+        th:last-child  { border-radius:0 8px 0 0; text-align:right; }
+        td { padding:12px 14px; border-bottom:1px solid var(--border); font-size:14px; color:var(--text-dark); }
+        td:last-child { text-align:right; font-weight:600; color:var(--primary-dark); }
+        tr:last-child td { border-bottom:none; }
+        .total-row td { font-weight:700; font-size:15px; color:var(--primary); background:rgba(16,185,129,.05); border-top:2px solid var(--primary); }
 
-nav a:hover {
-    color: black;
-}
+        .tracking-steps { display:flex; justify-content:space-between; position:relative; padding-top:8px; }
+        .tracking-line { position:absolute; top:26px; left:10%; right:10%; height:3px; background:var(--border); z-index:0; }
+        .tracking-line-fill { height:100%; width:40%; background:var(--primary); border-radius:3px; }
+        .step { display:flex; flex-direction:column; align-items:center; gap:8px; z-index:1; flex:1; }
+        .step-dot {
+            width:36px; height:36px; border-radius:50%;
+            background:var(--border);
+            display:flex; align-items:center; justify-content:center;
+            font-size:16px; border:3px solid var(--surface);
+            box-shadow:0 2px 8px rgba(0,0,0,.1);
+        }
+        .step.done .step-dot   { background:var(--primary); }
+        .step.active .step-dot { background:var(--primary); box-shadow:0 0 0 5px rgba(16,185,129,.2); }
+        .step-label { font-size:11px; font-weight:600; color:var(--text-muted); text-align:center; }
+        .step.done .step-label, .step.active .step-label { color:var(--primary-dark); }
 
-/* ===== CONTAINER ===== */
-.container {
-    max-width: 900px;
-    margin: auto;
-    padding: 30px;
-}
+        .btn-row { display:flex; gap:14px; margin-top:24px; animation:slideUp .6s ease-out .3s both; }
+        .btn {
+            flex:1; padding:13px; border-radius:12px;
+            font-size:14px; font-weight:600; cursor:pointer;
+            text-align:center; text-decoration:none;
+            transition:all .3s; font-family:'Poppins',sans-serif;
+            border:none; display:block;
+        }
+        .btn-primary {
+            background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+            color:white; box-shadow:0 6px 20px rgba(16,185,129,.3);
+        }
+        .btn-primary:hover { transform:translateY(-2px); box-shadow:0 12px 28px rgba(16,185,129,.4); }
+        .btn-outline { background:white; color:var(--primary); border:2px solid var(--primary) !important; }
+        .btn-outline:hover { background:#f0fdf4; transform:translateY(-2px); }
 
-/* SUCCESS BOX */
-.success-box {
-    background: white;
-    padding: 25px;
-    border-radius: 15px;
-    text-align: center;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-}
+        footer {
+            text-align:center; padding:16px;
+            background:var(--surface); border-top:1px solid var(--border);
+            color:var(--text-muted); font-size:13px;
+        }
 
-.success-box h1 {
-    color: #4caf50;
-}
-
-/* ORDER INFO */
-.order-info {
-    margin-top: 20px;
-    text-align: left;
-}
-
-/* TABLE */
-table {
-    width: 100%;
-    margin-top: 15px;
-    border-collapse: collapse;
-}
-
-th, td {
-    padding: 10px;
-    text-align: center;
-}
-
-th {
-    background: #ff9800;
-    color: white;
-}
-
-/* TRACKING */
-.tracking {
-    margin-top: 30px;
-}
-
-.step {
-    display: flex;
-    align-items: center;
-    margin: 15px 0;
-    font-size: 16px;
-}
-
-.circle {
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    background: #ccc;
-    margin-right: 10px;
-}
-
-.active {
-    background: #4caf50;
-}
-
-/* BUTTON */
-.btn {
-    margin-top: 25px;
-    display: inline-block;
-    padding: 12px 22px;
-    background: linear-gradient(45deg, #ff9800, #ff5722);
-    color: white;
-    text-decoration: none;
-    border-radius: 25px;
-    font-weight: bold;
-    transition: 0.3s;
-}
-
-.btn:hover {
-    transform: scale(1.05);
-}
-
-/* FOOTER */
-.main-footer {
-    margin-top: 40px;
-    text-align: center;
-    padding: 20px;
-    background: white;
-    border-top: 1px solid #ddd;
-}
-
-</style>
+        @media(max-width:600px) {
+            .btn-row { flex-direction:column; }
+            header { flex-direction:column; gap:12px; padding:12px 16px; }
+        }
+    </style>
 </head>
-
 <body>
 
-<header class="main-header">
-    <div class="logo">🏏 <span>Cricket Store</span></div>
-
+<header>
+    <div class="logo">
+        <a href="/dashboard_user" style="text-decoration:none;">
+            <img src="/static/images/logo.png" alt="Elite Cricket Academy" style="height:44px; width:auto; object-fit:contain;">
+        </a>
+    </div>
     <nav>
-        <a href="{{ url_for('homepage') }}">Home</a>
-        <a href="{{ url_for('store') }}">Store</a>
-        <a href="{{ url_for('cart_page') }}">Cart</a>
+        <a href="/dashboard_user">Home</a>
+        <a href="/store">Store</a>
     </nav>
 </header>
 
-<div class="container">
+<div class="main">
 
-<div class="success-box">
+    <div class="success-banner">
+        <span class="check-icon">✅</span>
+        <h1>Order Confirmed!</h1>
+        <p>Thank you for your purchase. Your order is being processed.</p>
+        <div class="order-meta">
+            <span class="meta-chip">Order #{{ order_id }}</span>
+            <span class="meta-chip">
+                {% if payment_method == "COD" %}💵 Cash on Delivery{% else %}✅ Paid Online{% endif %}
+            </span>
+            <span class="meta-chip">₹{{ total }}</span>
+        </div>
+    </div>
 
-    <h1>🎉 Order Placed Successfully!</h1>
-
-    <p><b>Order ID:</b> {{ order_id }}</p>
-
-    <p>
-        <b>Payment Status:</b>
-        {% if payment_method == "COD" %}
-            Pay on Delivery 💵
-        {% else %}
-            Paid ✅
-        {% endif %}
-    </p>
-
-    <div class="order-info">
-
-        <h3>🧾 Order Details</h3>
-
+    <div class="section">
+        <h3>🧾 Order Summary</h3>
         <table>
-            <tr>
-                <th>Product</th>
-                <th>Price</th>
-                <th>Qty</th>
-                <th>Total</th>
-            </tr>
-
-            {% for item in order_items %}
-            <tr>
-                <td>{{ item.name }}</td>
-                <td>₹{{ item.price }}</td>
-                <td>{{ item.quantity }}</td>
-                <td>₹{{ item.price * item.quantity }}</td>
-            </tr>
-            {% endfor %}
-
-            <tr>
-                <td colspan="3"><b>Total</b></td>
-                <td><b>₹{{ total }}</b></td>
-            </tr>
+            <thead>
+                <tr><th>Product</th><th>Price</th><th>Qty</th><th>Total</th></tr>
+            </thead>
+            <tbody>
+                {% for item in order_items %}
+                <tr>
+                    <td>{{ item.name }}</td>
+                    <td>₹{{ item.price }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>₹{{ item.price * item.quantity }}</td>
+                </tr>
+                {% endfor %}
+                <tr class="total-row">
+                    <td colspan="3">Grand Total</td>
+                    <td>₹{{ total }}</td>
+                </tr>
+            </tbody>
         </table>
-
     </div>
 
-    <!-- TRACKING -->
-    <div class="tracking">
+    <div class="section">
         <h3>🚚 Order Tracking</h3>
-
-        <div class="step">
-            <div class="circle active"></div>
-            Order Placed
-        </div>
-
-        <div class="step">
-            <div class="circle active"></div>
-            Processing
-        </div>
-
-        <div class="step">
-            <div class="circle"></div>
-            Out for Delivery
-        </div>
-
-        <div class="step">
-            <div class="circle"></div>
-            Delivered
+        <div class="tracking-steps">
+            <div class="tracking-line">
+                <div class="tracking-line-fill"></div>
+            </div>
+            <div class="step done">
+                <div class="step-dot">📋</div>
+                <div class="step-label">Placed</div>
+            </div>
+            <div class="step done">
+                <div class="step-dot">⚙️</div>
+                <div class="step-label">Processing</div>
+            </div>
+            <div class="step active">
+                <div class="step-dot">📦</div>
+                <div class="step-label">Packed</div>
+            </div>
+            <div class="step">
+                <div class="step-dot">🚚</div>
+                <div class="step-label">Delivery</div>
+            </div>
+            <div class="step">
+                <div class="step-dot">🏠</div>
+                <div class="step-label">Delivered</div>
+            </div>
         </div>
     </div>
 
-    <a href="{{ url_for('store') }}" class="btn">Continue Shopping</a>
+    <div class="btn-row">
+        <a href="/store" class="btn btn-primary">🛍 Continue Shopping</a>
+        <a href="/dashboard_user" class="btn btn-outline">🏠 Go to Dashboard</a>
+    </div>
 
 </div>
 
-</div>
-
-<footer class="main-footer">
-    <p>© 2026 <span style="color:#ff9800;">Cricket Store</span></p>
-    <p>Designed with ❤️ for Sports Lovers</p>
-</footer>
+<footer>© 2026 Elite Cricket Academy | All Rights Reserved</footer>
 
 </body>
 </html>

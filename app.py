@@ -35,6 +35,7 @@ orders_collection = db["orders"]
 payments_collection = db["payments"]
 players_collection = db["players"]
 reviews_collection = db["reviews"]
+schedules_collection = db["schedules"]
 
 
 
@@ -134,6 +135,12 @@ def dashboard_admin():
     all_users = list(users.find({"email": {"$nin": ADMIN_EMAILS}}, {"name": 1, "email": 1}))
     all_reviews = list(reviews_collection.find().sort("created_at", DESCENDING))
     reviews_count = reviews_collection.count_documents({})
+    schedules = list(db.schedules.find().sort("date", 1))
+    all_perf_users = list(users.find({"email": {"$nin": ADMIN_EMAILS}}, {"name": 1, "email": 1}))
+    all_performance = list(performance_collection.find().sort("session_date", -1))
+    all_orders = list(orders_collection.find().sort("created_at", -1))
+    orders_count = orders_collection.count_documents({})
+    store_products = list(products_collection.find())
 
     return render_template(
         "dashboard_admin.html",
@@ -145,7 +152,13 @@ def dashboard_admin():
         contact_data=list(contact_collection.find()),
         all_users=all_users,
         all_reviews=all_reviews,
-        reviews_count=reviews_count
+        reviews_count=reviews_count,
+        schedules=schedules,
+        all_perf_users=all_perf_users,
+        all_performance=all_performance,
+        all_orders=all_orders,
+        orders_count=orders_count,
+        store_products=store_products
     )
 
 # ------------------ USER MANAGEMENT ------------------
@@ -242,24 +255,18 @@ if products_collection.count_documents({}) == 0:
 @app.route("/store")
 def store():
     products = list(products_collection.find())
-
-    cart_count = cart_collection.count_documents({})
-
-    return render_template(
-        "store.html",
-        products=products,
-        cart_count=cart_count
-    )
+    cart_count = cart_collection.count_documents({"user": session.get("user", "")})
+    return render_template("store.html", products=products, cart_count=cart_count)
 # ===== ADD TO CART =====
 from bson.objectid import ObjectId
 from flask import request, redirect, url_for, flash
 
 @app.route("/add_to_cart/<product_id>", methods=["POST"])
 def add_to_cart(product_id):
+    if 'user' not in session:
+        return redirect('/login')
 
     quantity = int(request.form.get("quantity", 1))
-
-    # FIX: use ObjectId
     product = products_collection.find_one({"_id": ObjectId(product_id)})
 
     if not product:
@@ -267,17 +274,19 @@ def add_to_cart(product_id):
         return redirect(url_for("store"))
 
     product_id_str = str(product["_id"])
+    user_email = session["user"]
 
-    existing = cart_collection.find_one({"product_id": product_id_str})
+    existing = cart_collection.find_one({"product_id": product_id_str, "user": user_email})
 
     if existing:
         cart_collection.update_one(
-            {"product_id": product_id_str},
+            {"product_id": product_id_str, "user": user_email},
             {"$inc": {"quantity": quantity}}
         )
     else:
         cart_collection.insert_one({
             "product_id": product_id_str,
+            "user": user_email,
             "name": product["name"],
             "price": int(product["price"]),
             "quantity": int(quantity)
@@ -293,37 +302,30 @@ def clean_cart():
 # ===== CART PAGE =====
 @app.route("/cart")
 def cart_page():
-    cart = list(cart_collection.find())
-
+    user_email = session.get("user", "")
+    cart = list(cart_collection.find({"user": user_email}))
     total = 0
-
     for item in cart:
         price = int(item.get("price", 0))
         quantity = int(item.get("quantity", 1))
-
         item["price"] = price
         item["quantity"] = quantity
-
         total += price * quantity
-
     return render_template("cart.html", cart=cart, total=total)
 
 # ===== UPDATE CART =====
 @app.route("/update_cart/<product_id>", methods=["POST"])
 def update_cart(product_id):
     quantity = int(request.form.get("quantity", 1))
-
     cart_collection.update_one(
-        {"product_id": product_id},
+        {"product_id": product_id, "user": session.get("user")},
         {"$set": {"quantity": quantity}}
     )
-
     return redirect(url_for("cart_page"))
 
-# ===== REMOVE ITEM =====
 @app.route("/remove_from_cart/<product_id>", methods=["POST"])
 def remove_from_cart(product_id):
-    cart_collection.delete_one({"product_id": product_id})
+    cart_collection.delete_one({"product_id": product_id, "user": session.get("user")})
     return redirect(url_for("cart_page"))
 
 # ===== CHECKOUT =====
@@ -332,81 +334,93 @@ from bson.objectid import ObjectId
 
 @app.route("/checkout", methods=["GET", "POST"])
 def checkout():
+    if 'user' not in session:
+        return redirect('/login')
 
-    cart = list(cart_collection.find())
-
+    cart = list(cart_collection.find({"user": session["user"]}))
     total = sum(int(i["price"]) * int(i["quantity"]) for i in cart)
 
     if request.method == "POST":
         payment_method = request.form.get("payment_method")
+        if not payment_method:
+            flash("Please select a payment method.")
+            return redirect("/checkout")
 
         order_id = str(random.randint(100000, 999999))
 
-        # IMPORTANT: SAVE ORDER BEFORE REDIRECT
-        session["order"] = {
-            "order_id": order_id,
-            "items": cart,
-            "total": total,
-            "payment_method": payment_method
-        }
+        serialized = [
+            {"name": i["name"], "price": int(i["price"]), "quantity": int(i["quantity"])}
+            for i in cart
+        ]
 
-        # clear cart AFTER saving order
-        cart_collection.delete_many({})
+        # Store in DB instead of session to avoid cookie size limit
+        orders_collection.insert_one({
+            "order_id": order_id,
+            "user": session.get("user"),
+            "items": serialized,
+            "total": total,
+            "payment_method": payment_method,
+            "created_at": datetime.now()
+        })
+
+        # Keep only order_id in session
+        session["last_order_id"] = order_id
+        session.modified = True
+
+        cart_collection.delete_many({"user": session["user"]})
 
         if payment_method == "COD":
-            return redirect(url_for("order_success"))
-
-        return redirect(url_for("payment"))
+            return redirect(f"/order_success?oid={order_id}")
+        return redirect(f"/payment?oid={order_id}")
 
     return render_template("checkout.html", cart=cart, total=total)
+
 # ===== HOME =====
 # (handled by home() route above)
 
 #---------------payment---------------
 @app.route("/payment", methods=["GET", "POST"])
 def payment():
-    order = session.get("order")
+    order_id = (request.form.get("oid") or
+                request.args.get("oid") or
+                session.get("last_order_id"))
+    if not order_id:
+        return redirect("/checkout")
+    order = orders_collection.find_one({"order_id": order_id})
+    if not order:
+        return redirect("/checkout")
+    if request.method == "POST":
+        orders_collection.update_one({"order_id": order_id}, {"$set": {"payment_method": "ONLINE"}})
+        return redirect(f"/order_success?oid={order_id}")
+    return render_template("payment.html", total=order["total"], oid=order_id)
+
+#----------order success-----------
+@app.route("/order_success")
+def order_success():
+    order_id = request.args.get("oid") or session.get("last_order_id")
+
+    if order_id:
+        order = orders_collection.find_one({"order_id": order_id})
+    else:
+        order = None
+
+    # Final fallback — most recent order for this user
+    if not order and session.get("user"):
+        order = orders_collection.find_one(
+            {"user": session["user"]},
+            sort=[("_id", DESCENDING)]
+        )
 
     if not order:
         return redirect("/store")
 
-    if request.method == "POST":
-        # simulate payment success
-        return redirect("/order_success")
-
-    return render_template("payment.html", total=order["total"])
-
-#-----------payment sucess---------
-@app.route("/payment_success/<order_id>")
-def payment_success(order_id):
-
-    order = orders_collection.find_one({"order_id": order_id})
-
-    if not order:
-        return "Order not found", 404
-
-    return redirect(url_for(
-        "order_success",
-        order_id=order_id,
-        payment_method="ONLINE"
-    ))
-
-#----------order sucesss-----------
-from bson.objectid import ObjectId
-
-@app.route("/order_success")
-def order_success():
-    order = session.get("order")
-
-    if not order:
-        return redirect(url_for("store"))
-
     return render_template(
         "order_success.html",
         order_id=order["order_id"],
-        order_items=order["items"],
+        order_items=order.get("items", []),
         total=order["total"],
-        payment_method=order["payment_method"]
+        payment_method=order.get("payment_method", "COD"),
+        tracking_status=order.get("tracking_status", "Order Placed")
     )
 # ------------------ GAMES ------------------
 @app.route("/gamezone")
@@ -636,13 +650,9 @@ def add_player():
 def my_profile():
     if 'user' not in session:
         return redirect('/login')
-
     player = db.players.find_one({"user_email": session['user']})
     user = db.users.find_one({"email": session['user']})
-
     return render_template('user_profile.html', player=player, user=user)
-
-
 # ---------------- REVIEWS ----------------
 @app.route('/submit_review', methods=['POST'])
 def submit_review():
@@ -665,6 +675,206 @@ def submit_review():
 
     return redirect('/dashboard_user#review')
 
+
+# ---------------- PERFORMANCE ANALYTICS ----------------
+performance_collection = db["performance"]
+
+@app.route('/performance/add', methods=['POST'])
+def admin_add_performance():
+    if session.get('user') not in ADMIN_EMAILS:
+        return redirect('/login')
+    user_email = request.form['user_email']
+    performance_collection.insert_one({
+        "user_email": user_email,
+        "session_date": request.form['session_date'],
+        "batting_score": int(request.form.get('batting_score', 0)),
+        "bowling_wickets": int(request.form.get('bowling_wickets', 0)),
+        "fielding_score": int(request.form.get('fielding_score', 0)),
+        "fitness_score": int(request.form.get('fitness_score', 0)),
+        "notes": request.form.get('notes', ''),
+        "created_at": datetime.now()
+    })
+    flash("Performance record added!")
+    return redirect('/dashboard_admin#performance')
+
+@app.route('/performance/delete/<id>', methods=['POST'])
+def admin_delete_performance(id):
+    if session.get('user') not in ADMIN_EMAILS:
+        return redirect('/login')
+    performance_collection.delete_one({"_id": ObjectId(id)})
+    return redirect('/dashboard_admin#performance')
+
+@app.route('/my_performance')
+def my_performance():
+    if 'user' not in session:
+        return redirect('/login')
+    records = list(performance_collection.find(
+        {"user_email": session['user']}
+    ).sort("session_date", 1))
+    user = users.find_one({"email": session['user']})
+    return render_template('performance.html', records=records, user=user)
+
+# ---------------- TRAINING SCHEDULE ----------------
+@app.route('/admin/schedule/add', methods=['POST'])
+def admin_add_schedule():
+    if session.get('user') not in ADMIN_EMAILS:
+        return redirect('/login')
+    schedules_collection.insert_one({
+        "title":    request.form['title'],
+        "date":     request.form['date'],
+        "time":     request.form['time'],
+        "duration": request.form.get('duration', ''),
+        "coach":    request.form.get('coach', ''),
+        "batch":    request.form.get('batch', 'All'),
+        "notes":    request.form.get('notes', ''),
+        "created_at": datetime.now()
+    })
+    flash("Session added successfully!")
+    return redirect('/dashboard_admin#schedule')
+
+@app.route('/admin/schedule/delete/<id>', methods=['POST'])
+def admin_delete_schedule(id):
+    if session.get('user') not in ADMIN_EMAILS:
+        return redirect('/login')
+    schedules_collection.delete_one({"_id": ObjectId(id)})
+    flash("Session deleted.")
+    return redirect('/dashboard_admin#schedule')
+
+@app.route('/training_schedule')
+def training_schedule():
+    if 'user' not in session:
+        return redirect('/login')
+    schedules = list(schedules_collection.find().sort("date", 1))
+    return render_template('training_schedule.html', schedules=schedules)
+
+
+# ------------------ ML PLAYER PREDICTION ------------------
+import numpy as np
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.cluster import KMeans
+
+def predict_best_players():
+    """
+    Aggregates performance data per user, normalises it,
+    computes a weighted composite score, clusters players
+    into tiers, and returns a ranked list with ML insights.
+    """
+    pipeline = list(performance_collection.aggregate([
+        {"$group": {
+            "_id": "$user_email",
+            "avg_batting":  {"$avg": "$batting_score"},
+            "avg_bowling":  {"$avg": "$bowling_wickets"},
+            "avg_fielding": {"$avg": "$fielding_score"},
+            "avg_fitness":  {"$avg": "$fitness_score"},
+            "sessions":     {"$sum": 1},
+            "last_date":    {"$max": "$session_date"}
+        }}
+    ]))
+
+    if len(pipeline) < 2:
+        return [], []   # not enough data for clustering
+
+    # Build feature matrix
+    emails   = [p["_id"] for p in pipeline]
+    features = np.array([
+        [p["avg_batting"],
+         p["avg_bowling"] * 10,   # scale wickets to ~0-100
+         p["avg_fielding"],
+         p["avg_fitness"],
+         min(p["sessions"] * 5, 100)]  # consistency bonus, capped at 100
+        for p in pipeline
+    ], dtype=float)
+
+    # Normalise 0-1
+    scaler = MinMaxScaler()
+    norm   = scaler.fit_transform(features)
+
+    # Weighted composite score (batting 30%, bowling 25%, fielding 20%, fitness 20%, consistency 5%)
+    weights = np.array([0.30, 0.25, 0.20, 0.20, 0.05])
+    scores  = (norm * weights).sum(axis=1) * 100   # 0-100
+
+    # KMeans clustering into 3 tiers
+    n_clusters = min(3, len(pipeline))
+    km = KMeans(n_clusters=n_clusters, random_state=42, n_init=10)
+    labels = km.fit_predict(norm)
+
+    # Map cluster label → tier name by cluster centre score
+    centre_scores = {i: (km.cluster_centers_[i] * weights).sum() for i in range(n_clusters)}
+    sorted_centres = sorted(centre_scores, key=centre_scores.get, reverse=True)
+    tier_names = {sorted_centres[0]: "Elite", sorted_centres[1]: "Developing"}
+    if n_clusters == 3:
+        tier_names[sorted_centres[2]] = "Beginner"
+
+    # Enrich pipeline records
+    for i, p in enumerate(pipeline):
+        user = users.find_one({"email": p["_id"]}, {"name": 1})
+        p["name"]          = user["name"] if user else p["_id"]
+        p["score"]         = round(float(scores[i]), 1)
+        p["tier"]          = tier_names.get(int(labels[i]), "Beginner")
+        p["avg_batting"]   = round(p["avg_batting"],  1)
+        p["avg_bowling"]   = round(p["avg_bowling"],  1)
+        p["avg_fielding"]  = round(p["avg_fielding"], 1)
+        p["avg_fitness"]   = round(p["avg_fitness"],  1)
+
+    pipeline.sort(key=lambda x: x["score"], reverse=True)
+
+    # Feature importance (just the weights, labelled)
+    feature_importance = [
+        {"feature": "Batting",     "weight": 30},
+        {"feature": "Bowling",     "weight": 25},
+        {"feature": "Fielding",    "weight": 20},
+        {"feature": "Fitness",     "weight": 20},
+        {"feature": "Consistency", "weight": 5},
+    ]
+
+    return pipeline, feature_importance
+
+
+@app.route("/ml_predictions")
+def ml_predictions():
+    if session.get("user") not in ADMIN_EMAILS:
+        return redirect("/login")
+    players, feature_importance = predict_best_players()
+    return render_template("ml_predictions.html",
+                           players=players,
+                           feature_importance=feature_importance)
+
+
+
+# ------------------ ORDER MANAGEMENT ------------------
+TRACKING_STEPS = ["Order Placed", "Processing", "Packed", "Out for Delivery", "Delivered"]
+
+@app.route('/admin/order/update_tracking/<order_id>', methods=['POST'])
+def admin_update_tracking(order_id):
+    if session.get('user') not in ADMIN_EMAILS:
+        return redirect('/login')
+
+    status = request.form.get('tracking_status')
+
+    if status in TRACKING_STEPS:
+        orders_collection.update_one(
+            {"order_id": order_id},
+            {"$set": {"tracking_status": status}}
+        )
+        flash(f"Tracking updated to '{status}'")
+
+    return redirect('/dashboard_admin#orders')
+
+@app.route('/admin/order/delete/<order_id>', methods=['POST'])
+def admin_delete_order(order_id):
+    if session.get('user') not in ADMIN_EMAILS:
+        return redirect('/login')
+    orders_collection.delete_one({"order_id": order_id})
+    flash("Order deleted.")
+    return redirect('/dashboard_admin#orders')
+
+# ------------------ ABOUT & PROGRAMS ------------------
+def about():
+    return render_template("about.html")
+
+@app.route("/programs")
+def programs():
+    return render_template("programs.html")
 
 # ------------------ RUN APP ------------------
 if __name__ == "__main__":
