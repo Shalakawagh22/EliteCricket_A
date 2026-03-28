@@ -22,7 +22,9 @@ app.config['MAIL_DEFAULT_SENDER'] = 'shalakawagh22@gmail.com'
 mail = Mail(app)
 
 # -------- MONGODB --------
-client = MongoClient("mongodb://localhost:27017/")
+import os
+from pymongo import MongoClient
+client = MongoClient(os.getenv("mongodb://localhost:27017/"))
 db = client["cricket_academy_db"]
 users = db["users"]
 enrollments = db["enrollments"]
