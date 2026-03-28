@@ -286,7 +286,7 @@ function gameLoop() {
     }
 
     // spawn
-    const spawnRate = Math.max(0.015, 0.035 - level * 0.002);
+    const spawnRate = Math.max(0.006, 0.015 - level * 0.001);
     if (Math.random() < spawnRate) {
         const lane = Math.floor(Math.random() * LANE_COUNT);
         enemies.push({

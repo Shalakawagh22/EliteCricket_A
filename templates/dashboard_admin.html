@@ -821,6 +821,9 @@ label {
         };
 
         function showSection(id, element) {
+            // Save to localStorage
+            localStorage.setItem('adminSection', id);
+
             // Update Navigation
             document.querySelectorAll('.nav-items a').forEach(el => el.classList.remove('active'));
             if(element) element.classList.add('active');
@@ -850,8 +853,15 @@ label {
             }, 100);
         }
 
-        // ADD INTERACTIVE TABLE ROW EFFECTS
+        // ADD INTERACTIVE TABLE ROW EFFECTS + RESTORE SECTION
         document.addEventListener('DOMContentLoaded', function() {
+            // Restore last active section on refresh
+            const saved = localStorage.getItem('adminSection');
+            if (saved && document.getElementById(saved)) {
+                const navLink = document.querySelector(`.nav-items a[onclick*="'${saved}'"]`);
+                showSection(saved, navLink);
+            }
+
             document.querySelectorAll('tbody tr').forEach(row => {
                 row.style.cursor = 'pointer';
                 row.style.transition = 'all 0.3s ease';

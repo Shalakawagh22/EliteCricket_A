@@ -431,7 +431,7 @@ import google.generativeai as genai
 
 genai.configure(api_key="AIzaSyCkBHhIjk2Bz95XCQaUhodErcIMKvUQN-g")
 
-model = genai.GenerativeModel("gemini-pro")
+model = genai.GenerativeModel("gemini-1.5-flash")
 
 
 # ------------------ AI CHATBOT ------------------
@@ -443,52 +443,54 @@ OPENROUTER_API_KEY = "sk-or-v1-73d405ee889a0a15273228edcd54863780d28a725a0edfae8
 
 @app.route("/chatbot")
 def chatbot():
+    if 'user' not in session:
+        return redirect('/login')
     return render_template("chatbot.html")
+
+
+@app.route("/clear_chat")
+def clear_chat():
+    return jsonify({"status": "cleared"})
 
 
 @app.route("/get_response", methods=["POST"])
 def get_response():
-    user_msg = request.json.get("message")
+    user_msg = request.json.get("message", "").strip().lower()
+    if not user_msg:
+        return jsonify({"response": "Please type a message."})
 
+    # ---- Try Gemini first ----
     try:
-        response = requests.post(
-            "https://openrouter.ai/api/v1/chat/completions",
-            headers={
-                "Authorization": f"Bearer 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",
-                "Content-Type": "application/json"
-            },
-            json={
-                "model": "openai/gpt-3.5-turbo",
-                "messages": [
-                    {
-                        "role": "system",
-                        "content": "You are a professional cricket coach AI. Give short, helpful answers."
-                    },
-                    {
-                        "role": "user",
-                        "content": user_msg
-                    }
-                ]
-            }
-        )
-
-        data = response.json()
-
-        # 🔍 DEBUG (optional)
-        print("AI RESPONSE:", data)
-
-        if "choices" in data:
-            reply = data["choices"][0]["message"]["content"]
-        elif "error" in data:
-            reply = "⚠️ " + str(data["error"])
-        else:
-            reply = "⚠️ AI not responding properly"
-
+        prompt = f"You are a professional cricket coach AI for Elite Cricket Academy. Give short, helpful, friendly answers in 2-4 sentences.\n\nUser: {user_msg}\nCoach:"
+        response = model.generate_content(prompt)
+        reply = response.text.strip()
         return jsonify({"response": reply})
-
     except Exception as e:
-        return jsonify({"response": "⚠️ Error: " + str(e)})
-    
+        print("Gemini error:", e)
+
+    # ---- Fallback: rule-based cricket Q&A ----
+    qa = [
+        (["batting", "bat", "improve batting", "batting tips"], "🏏 To improve batting: 1) Keep your eye on the ball at all times. 2) Practice your footwork daily. 3) Work on both front-foot and back-foot play. 4) Shadow bat in front of a mirror to check your technique."),
+        (["bowling", "bowl", "bowling tips", "bowling technique"], "🎳 Key bowling tips: 1) Focus on a consistent run-up. 2) Keep your wrist behind the ball at release. 3) Vary your pace and length to deceive batsmen. 4) Practice yorkers and bouncers regularly."),
+        (["fielding", "field", "catching", "fielding tips"], "🏃 Fielding tips: 1) Always stay on your toes and be ready to move. 2) Practice catching with both hands. 3) Work on your throwing accuracy. 4) Anticipate the ball's direction based on the batsman's stance."),
+        (["fitness", "fit", "exercise", "training", "workout"], "💪 Cricket fitness: 1) Focus on agility drills and sprints. 2) Build core strength with planks and squats. 3) Do shoulder strengthening exercises to prevent injury. 4) Maintain flexibility with daily stretching."),
+        (["wicket", "wicket keeping", "keeper"], "🧤 Wicket-keeping tips: 1) Stay low and balanced behind the stumps. 2) Keep your eyes level with the ball. 3) Practice taking catches on both sides. 4) Work on your footwork for wide deliveries."),
+        (["spin", "spin bowling", "spinner"], "🌀 Spin bowling tips: 1) Grip the ball with your fingers, not your palm. 2) Use your wrist to generate turn. 3) Vary your flight and pace. 4) Practice the googly and doosra to deceive batsmen."),
+        (["fast", "fast bowling", "pace", "pacer"], "⚡ Fast bowling tips: 1) Build a smooth, rhythmic run-up. 2) Jump high at the crease for extra bounce. 3) Keep your front arm high for control. 4) Strengthen your core and legs for power."),
+        (["diet", "food", "nutrition", "eat"], "🥗 Cricket nutrition: 1) Eat complex carbs before matches for energy. 2) Stay hydrated — drink water every 20 minutes. 3) Have protein after training for muscle recovery. 4) Avoid heavy meals before playing."),
+        (["mental", "pressure", "confidence", "nervous", "focus"], "🧠 Mental game tips: 1) Focus on one ball at a time. 2) Use deep breathing to stay calm under pressure. 3) Visualize success before you bat or bowl. 4) Learn from mistakes without dwelling on them."),
+        (["enroll", "join", "register", "academy", "program"], "🎓 To join Elite Cricket Academy, visit our Enroll page! We offer Beginner, Intermediate, and Advanced programs with professional coaches. Click 'Enroll' in the navigation to get started."),
+        (["hello", "hi", "hey", "good morning", "good evening"], "👋 Hello! I'm your AI Cricket Coach. Ask me about batting, bowling, fielding, fitness, or anything cricket-related!"),
+        (["thank", "thanks", "thank you"], "😊 You're welcome! Keep practicing and you'll reach the top. Any other cricket questions?"),
+        (["bye", "goodbye", "see you"], "👋 Goodbye! Keep training hard and stay passionate about cricket. See you on the field!"),
+    ]
+
+    for keywords, answer in qa:
+        if any(kw in user_msg for kw in keywords):
+            return jsonify({"response": answer})
+
+    return jsonify({"response": "🏏 Great question! I can help with batting, bowling, fielding, fitness, wicket-keeping, spin/pace bowling, nutrition, and mental game tips. What would you like to know?"})
+
 #-------------------store admin-----------
 
 UPLOAD_FOLDER = "static/uploads"

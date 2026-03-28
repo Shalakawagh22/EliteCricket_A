@@ -6,206 +6,188 @@
     <title>AI Coach - Elite Cricket Academy</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #10b981;
             --primary-dark: #059669;
             --secondary: #3b82f6;
-            --accent: #f59e0b;
             --danger: #ef4444;
             --text-dark: #1f2937;
             --text-muted: #6b7280;
-            --bg-light: #f9fafb;
+            --bg: #f0fdf4;
             --surface: #ffffff;
             --border: #e5e7eb;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #f9fafb 0%, #f0fdf4 100%);
+            background: var(--bg);
             color: var(--text-dark);
-            line-height: 1.6;
-            min-height: 100vh;
+            height: 100vh;
             display: flex;
             flex-direction: column;
+            overflow: hidden;
         }
 
-        /* ===== ANIMATIONS ===== */
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes msgIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes blink {
+            0%, 80%, 100% { opacity: 0.2; }
+            40%           { opacity: 1; }
         }
 
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes messageSlideIn {
-            from { 
-                opacity: 0; 
-                transform: translateY(10px);
-            }
-            to { 
-                opacity: 1; 
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-8px); }
-        }
-
-        /* ===== HEADER ===== */
-        .navbar {
-            background: linear-gradient(135deg, var(--surface), #f0fdf4);
-            padding: 16px 32px;
+        /* ── TOP NAV ── */
+        .topbar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            animation: slideDown 0.6s ease-out;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
         }
 
-        .navbar .logo h2 {
-            color: var(--primary);
-            font-size: 24px;
-        }
-
-        .navbar nav {
-            display: flex;
-            gap: 32px;
-            align-items: center;
-        }
-
-        .navbar a {
-            color: var(--text-dark);
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .navbar a:hover {
-            color: var(--primary);
-        }
-
-        .navbar a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--primary);
-            transition: width 0.3s ease;
-        }
-
-        .navbar a:hover::after {
-            width: 100%;
-        }
-
-        /* ===== MAIN CONTENT ===== */
-        .main-content {
-            flex: 1;
-            padding: 40px 20px;
-            max-width: 500px;
-            margin: 0 auto;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            animation: fadeIn 0.6s ease-out;
-        }
-
-        .chat-header {
-            text-align: center;
-            margin-bottom: 40px;
-            animation: slideUp 0.6s ease-out;
-        }
-
-        .chat-header h1 {
-            font-size: 42px;
-            margin-bottom: 12px;
-            background: linear-gradient(135deg, var(--text-dark), var(--primary));
+        .topbar .logo {
+            font-size: 18px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .chat-header p {
+        .topbar nav { display: flex; gap: 16px; align-items: center; }
+
+        .topbar nav a {
+            text-decoration: none;
             color: var(--text-muted);
-            font-size: 16px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: color 0.2s;
         }
 
-        /* ===== CHAT CONTAINER ===== */
-        .chat-wrapper {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
-            display: flex;
-            flex-direction: column;
-            height: 600px;
-            overflow: hidden;
-            animation: slideUp 0.6s ease-out 0.1s both;
-        }
+        .topbar nav a:hover { color: var(--primary); }
 
-        .chat-header-bar {
+        .topbar nav a.btn {
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-radius: 20px 20px 0 0;
-        }
-
-        .chat-header-bar h2 {
-            font-size: 20px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .clear-btn {
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            color: white;
-            padding: 8px 16px;
+            padding: 7px 16px;
             border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
             font-weight: 600;
-            transition: all 0.3s ease;
         }
 
-        .clear-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.05);
+        /* ── LAYOUT: sidebar + chat ── */
+        .layout {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
         }
 
-        /* ===== CHATBOX ===== */
+        /* ── LEFT SIDEBAR ── */
+        .sidebar {
+            width: 260px;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 20px 16px;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-title {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+            padding: 0 4px;
+        }
+
+        .chip {
+            background: rgba(16,185,129,0.07);
+            border: 1px solid rgba(16,185,129,0.2);
+            color: var(--primary-dark);
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+            font-family: 'Poppins', sans-serif;
+            width: 100%;
+        }
+
+        .chip:hover {
+            background: rgba(16,185,129,0.15);
+            transform: translateX(4px);
+        }
+
+        .sidebar-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 8px 0;
+        }
+
+        .clear-side {
+            margin-top: auto;
+            background: rgba(239,68,68,0.07);
+            border: 1px solid rgba(239,68,68,0.2);
+            color: var(--danger);
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            width: 100%;
+            transition: background 0.2s;
+        }
+
+        .clear-side:hover { background: rgba(239,68,68,0.14); }
+
+        /* ── CHAT AREA ── */
+        .chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Chat header */
+        .chat-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        .bot-avatar {
+            width: 42px;
+            height: 42px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .bot-info .name { font-size: 15px; font-weight: 700; color: white; }
+        .bot-info .status { font-size: 12px; color: rgba(255,255,255,0.75); }
+
+        /* Messages */
         .chatbox {
             flex: 1;
             overflow-y: auto;
@@ -213,425 +195,300 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
-            scroll-behavior: smooth;
+            background: var(--bg);
         }
 
-        .chatbox::-webkit-scrollbar {
-            width: 8px;
+        .chatbox::-webkit-scrollbar { width: 5px; }
+        .chatbox::-webkit-scrollbar-thumb { background: #c7f0e0; border-radius: 10px; }
+
+        .msg-row {
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
         }
 
-        .chatbox::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
+        .msg-row.user { flex-direction: row-reverse; }
+
+        .msg-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
         }
 
-        .chatbox::-webkit-scrollbar-thumb {
-            background: var(--primary);
-            border-radius: 10px;
-        }
+        .msg-row.bot .msg-avatar  { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); }
+        .msg-row.user .msg-avatar { background: linear-gradient(135deg, #6366f1, #4f46e5); }
 
-        .chatbox::-webkit-scrollbar-thumb:hover {
-            background: var(--primary-dark);
-        }
-
-        /* ===== BOT MESSAGE ===== */
-        .bot-msg {
-            background: linear-gradient(135deg, #f0fdf4, #dbeafe);
-            color: var(--text-dark);
-            padding: 14px 18px;
+        .bubble {
+            max-width: 62%;
+            padding: 11px 15px;
             border-radius: 16px;
-            border-left: 4px solid var(--primary);
-            max-width: 85%;
-            align-self: flex-start;
-            animation: messageSlideIn 0.4s ease-out;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.1);
+            font-size: 14px;
+            line-height: 1.6;
+            animation: msgIn 0.3s ease-out;
             word-wrap: break-word;
         }
 
-        .bot-msg b {
-            color: var(--primary);
-            font-weight: 700;
-            display: block;
-            margin-bottom: 4px;
-            font-size: 13px;
+        .msg-row.bot .bubble {
+            background: var(--surface);
+            color: var(--text-dark);
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            border-left: 3px solid var(--primary);
         }
 
-        /* ===== USER MESSAGE ===== */
-        .user-msg {
+        .msg-row.user .bubble {
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
-            padding: 14px 18px;
-            border-radius: 16px;
-            max-width: 85%;
-            align-self: flex-end;
-            animation: messageSlideIn 0.4s ease-out;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
-            word-wrap: break-word;
+            border-bottom-right-radius: 4px;
             font-weight: 500;
         }
 
-        /* ===== INPUT AREA ===== */
-        .input-area {
-            display: flex;
-            gap: 12px;
-            padding: 16px 20px;
-            background: white;
+        /* Typing dots */
+        .typing { display: flex; gap: 4px; align-items: center; padding: 4px 2px; }
+        .typing span {
+            width: 7px; height: 7px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: blink 1.2s infinite;
+        }
+        .typing span:nth-child(2) { animation-delay: 0.2s; }
+        .typing span:nth-child(3) { animation-delay: 0.4s; }
+
+        /* ── INPUT BAR ── */
+        .input-bar {
+            background: var(--surface);
             border-top: 1px solid var(--border);
-            border-radius: 0 0 20px 20px;
+            padding: 12px 16px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-shrink: 0;
         }
 
         #message {
             flex: 1;
-            padding: 12px 16px;
+            padding: 11px 16px;
             border: 2px solid var(--border);
             border-radius: 12px;
             font-family: 'Poppins', sans-serif;
             font-size: 14px;
             outline: none;
-            transition: all 0.3s ease;
+            background: var(--bg);
             color: var(--text-dark);
+            transition: border-color 0.25s, box-shadow 0.25s;
         }
 
         #message:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(16,185,129,0.1);
         }
 
-        #message::placeholder {
-            color: var(--text-muted);
-        }
+        #message::placeholder { color: var(--text-muted); }
 
-        /* ===== BUTTONS ===== */
-        .input-area button {
-            padding: 12px 16px;
+        .icon-btn {
+            width: 44px;
+            height: 44px;
             border: none;
             border-radius: 12px;
             font-size: 16px;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-            font-weight: 600;
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            flex-shrink: 0;
         }
 
-        .btn-send {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
-        }
+        .icon-btn:hover { transform: translateY(-2px); }
 
-        .btn-send:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
-        }
+        .btn-send  { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; box-shadow: 0 4px 12px rgba(16,185,129,0.3); }
+        .btn-voice { background: linear-gradient(135deg, var(--secondary), #2563eb); color: white; }
+        .btn-voice.listening { background: linear-gradient(135deg, var(--danger), #dc2626); animation: blink 0.8s infinite; }
+        .btn-stop  { background: #f3f4f6; color: var(--text-muted); }
 
-        .btn-voice {
-            background: linear-gradient(135deg, var(--secondary), #2563eb);
-            color: white;
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
-        }
-
-        .btn-voice:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
-        }
-
-        .btn-stop {
-            background: linear-gradient(135deg, var(--danger), #dc2626);
-            color: white;
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
-        }
-
-        .btn-stop:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
-        }
-
-        /* ===== FOOTER ===== */
-        .footer {
-            background: linear-gradient(135deg, var(--text-dark), #1f3a3f);
-            color: white;
-            padding: 40px 20px 20px;
-            text-align: center;
-            margin-top: auto;
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .footer-content p {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-
-        .footer-content .separator {
-            color: var(--primary);
-            margin: 0 8px;
-        }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 768px) {
-            .navbar {
-                flex-direction: column;
-                gap: 16px;
-            }
-
-            .navbar nav {
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 16px;
-            }
-
-            .chat-header h1 {
-                font-size: 28px;
-            }
-
-            .chat-wrapper {
-                height: 500px;
-            }
-
-            .bot-msg,
-            .user-msg {
-                max-width: 100%;
-            }
-
-            .input-area {
-                flex-wrap: wrap;
-            }
-
-            .input-area button {
-                flex: 1;
-                min-width: 60px;
-            }
+        @media (max-width: 700px) {
+            .sidebar { display: none; }
+            .bubble { max-width: 85%; }
         }
     </style>
 </head>
-
 <body>
 
-<!-- HEADER -->
-<header class="navbar">
-    <div class="logo">
-        <h2>🏏 Elite Cricket Academy</h2>
-    </div>
-
+<!-- TOP NAV -->
+<div class="topbar">
+    <div class="logo">🏏 Cricket Academy</div>
     <nav>
-        <a href="/">Home</a>
-        <a href="/about">About</a>
-        <a href="/programs">Programs</a>
-        <a href="/contact">Contact</a>
-        <a href="/gamezone">Game Zone</a>
+        <a href="/dashboard_user">Home</a>
+        <a href="/gamezone">Games</a>
         <a href="/store">Shop</a>
-        <a href="/login" style="background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; padding: 10px 20px; border-radius: 8px; display: inline-block;">Login</a>
+        <a href="/logout" class="btn">Logout</a>
     </nav>
-</header>
+</div>
 
-<!-- MAIN CONTENT -->
-<div class="main-content">
-    <div class="chat-header">
-        <h1>🤖 AI Coach</h1>
-        <p>Ask me anything about cricket, training, or the academy</p>
+<!-- LAYOUT -->
+<div class="layout">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="sidebar-title">Quick Questions</div>
+
+        <button class="chip" onclick="ask('How to improve batting?')">🏏 Batting tips</button>
+        <button class="chip" onclick="ask('Best bowling techniques?')">🎳 Bowling tips</button>
+        <button class="chip" onclick="ask('Fitness tips for cricket?')">💪 Fitness advice</button>
+        <button class="chip" onclick="ask('How to improve fielding?')">🏃 Fielding tips</button>
+        <button class="chip" onclick="ask('Wicket keeping tips?')">🧤 Wicket keeping</button>
+        <button class="chip" onclick="ask('Cricket diet and nutrition?')">🥗 Nutrition</button>
+        <button class="chip" onclick="ask('How to handle pressure in cricket?')">🧠 Mental game</button>
+
+        <div class="sidebar-divider"></div>
+
+        <button class="chip" onclick="ask('Tell me about Elite Cricket Academy programs')">🎓 Our Programs</button>
+        <button class="chip" onclick="ask('How to enroll in the academy?')">📋 How to Enroll</button>
+
+        <button class="clear-side" onclick="clearChat()">🗑 Clear Chat</button>
     </div>
 
-    <div class="chat-wrapper">
-        <!-- CHAT HEADER BAR -->
-        <div class="chat-header-bar">
-            <h2>💬 AI Assistant</h2>
-            <button class="clear-btn" onclick="clearChat()">🗑 Clear Chat</button>
-        </div>
+    <!-- CHAT AREA -->
+    <div class="chat-area">
 
-        <!-- CHAT AREA -->
-        <div class="chatbox" id="chatbox">
-            <div class="bot-msg">
-                <b>AI Coach</b>
-                Hello! I'm your AI Cricket Coach 🏏 Ask me anything about cricket training, techniques, or Elite Cricket Academy!
+        <!-- Header -->
+        <div class="chat-header">
+            <div class="bot-avatar">🤖</div>
+            <div class="bot-info">
+                <div class="name">AI Cricket Coach</div>
+                <div class="status">● Online — Ask me anything</div>
             </div>
         </div>
 
-        <!-- INPUT AREA -->
-        <div class="input-area">
-            <input type="text" id="message" placeholder="Type your question here..." autofocus>
-            <button class="btn-send" onclick="sendMessage(false)" title="Send Message">➤</button>
-            <button class="btn-voice" onclick="startVoice()" title="Start Voice Input">🎤</button>
-            <button class="btn-stop" onclick="stopSpeaking()" title="Stop Speaking">🔇</button>
+        <!-- Messages -->
+        <div class="chatbox" id="chatbox">
+            <div class="msg-row bot">
+                <div class="msg-avatar">🤖</div>
+                <div class="bubble">
+                    Hello! I'm your AI Cricket Coach 🏏<br>
+                    Ask me anything about batting, bowling, fielding, fitness, or the academy. Use the quick questions on the left to get started!
+                </div>
+            </div>
         </div>
+
+        <!-- Input -->
+        <div class="input-bar">
+            <input type="text" id="message" placeholder="Ask about cricket, training, techniques..." autofocus>
+            <button class="icon-btn btn-send"  onclick="sendMessage()"  title="Send">➤</button>
+            <button class="icon-btn btn-voice" id="voiceBtn" onclick="toggleVoice()" title="Voice">🎤</button>
+            <button class="icon-btn btn-stop"  onclick="stopSpeaking()" title="Stop">🔇</button>
+        </div>
+
     </div>
 </div>
 
-<!-- FOOTER -->
-<footer class="footer">
-    <div class="footer-content">
-        <p>© 2026 Elite Cricket Academy <span class="separator">|</span> AI Coach Assistant</p>
-        <p>Helping you become a better cricket player with expert guidance</p>
-    </div>
-</footer>
-
 <script>
-let recognition;
-let isListening = false;
-let currentSpeech = null;
+const chatbox  = document.getElementById("chatbox");
+const msgInput = document.getElementById("message");
+let recognition = null, isListening = false;
 
-/* ================= SEND MESSAGE ================= */
+/* ── helpers ── */
+function scrollBottom() { chatbox.scrollTop = chatbox.scrollHeight; }
+
+function addMsg(type, html, isTyping = false) {
+    const row = document.createElement("div");
+    row.className = `msg-row ${type}`;
+
+    const av = document.createElement("div");
+    av.className = "msg-avatar";
+    av.innerText = type === "bot" ? "🤖" : "👤";
+
+    const bub = document.createElement("div");
+    bub.className = "bubble";
+
+    if (isTyping) {
+        bub.innerHTML = '<div class="typing"><span></span><span></span><span></span></div>';
+    } else {
+        bub.innerHTML = html;
+    }
+
+    row.appendChild(av);
+    row.appendChild(bub);
+    chatbox.appendChild(row);
+    scrollBottom();
+    return bub;
+}
+
+/* ── send ── */
 async function sendMessage(isVoice = false) {
-    let input = document.getElementById("message");
-    let msg = input.value.trim();
+    const msg = msgInput.value.trim();
+    if (!msg) return;
 
-    if (msg === "") return;
+    addMsg("user", msg);
+    msgInput.value = "";
 
-    let chatbox = document.getElementById("chatbox");
-
-    // USER MESSAGE
-    let userDiv = document.createElement("div");
-    userDiv.className = "user-msg";
-    userDiv.innerText = msg;
-    chatbox.appendChild(userDiv);
-
-    input.value = "";
-
-    // BOT LOADING
-    let botDiv = document.createElement("div");
-    botDiv.className = "bot-msg";
-    botDiv.innerHTML = "<b>AI Coach</b><br>Typing...";
-    chatbox.appendChild(botDiv);
-
-    chatbox.scrollTop = chatbox.scrollHeight;
+    const typingBub = addMsg("bot", null, true);
 
     try {
-        let response = await fetch("/get_response", {
+        const res  = await fetch("/get_response", {
             method: "POST",
-            headers: {"Content-Type": "application/json"},
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ message: msg })
         });
-
-        let data = await response.json();
-        let reply = data.response || "No response";
-
-        botDiv.innerHTML = "<b>AI Coach</b><br>" + reply;
-
-        // 🔊 Speak only if voice input
-        if (isVoice) {
-            speak(reply);
-        }
-
-    } catch (error) {
-        botDiv.innerHTML = "<b>AI Coach</b><br>⚠️ Server error. Please try again.";
+        const data = await res.json();
+        const reply = data.response || "Sorry, I couldn't get a response.";
+        typingBub.innerHTML = reply.replace(/\n/g, "<br>");
+        if (isVoice) speak(reply);
+    } catch {
+        typingBub.innerHTML = "⚠️ Connection error. Please try again.";
     }
 
-    chatbox.scrollTop = chatbox.scrollHeight;
+    scrollBottom();
 }
 
-/* ================= ENTER KEY ================= */
-document.getElementById("message").addEventListener("keypress", function(e) {
-    if (e.key === "Enter") {
-        sendMessage(false);
-    }
-});
+function ask(text) { msgInput.value = text; sendMessage(); }
 
-/* ================= START VOICE ================= */
-function startVoice() {
-    if (!('webkitSpeechRecognition' in window)) {
-        alert("Use Chrome browser for voice support");
-        return;
-    }
+msgInput.addEventListener("keypress", e => { if (e.key === "Enter") sendMessage(); });
 
-    if (isListening) return;
+/* ── voice ── */
+function toggleVoice() {
+    if (isListening) { stopVoice(); return; }
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) { alert("Voice input requires Chrome."); return; }
 
-    recognition = new webkitSpeechRecognition();
+    recognition = new SR();
     recognition.lang = "en-IN";
-    recognition.continuous = false;
-
-    isListening = true;
+    recognition.onstart  = () => { isListening = true;  document.getElementById("voiceBtn").classList.add("listening"); };
+    recognition.onresult = e  => { msgInput.value = e.results[0][0].transcript; stopVoice(); sendMessage(true); };
+    recognition.onerror  = () => stopVoice();
+    recognition.onend    = () => stopVoice();
     recognition.start();
-
-    let chatbox = document.getElementById("chatbox");
-
-    let listenDiv = document.createElement("div");
-    listenDiv.className = "bot-msg";
-    listenDiv.innerHTML = "<b>AI Coach</b><br>🎤 Listening...";
-    chatbox.appendChild(listenDiv);
-
-    recognition.onresult = function(event) {
-        let voiceText = event.results[0][0].transcript;
-
-        document.getElementById("message").value = voiceText;
-        listenDiv.innerHTML = "<b>AI Coach</b><br>Heard: " + voiceText;
-
-        isListening = false;
-
-        sendMessage(true); // voice mode
-    };
-
-    recognition.onerror = function() {
-        listenDiv.innerHTML = "<b>AI Coach</b><br>⚠️ Voice error";
-        isListening = false;
-    };
-
-    recognition.onend = function() {
-        isListening = false;
-    };
 }
 
-/* ================= STOP LISTENING ================= */
-function stopVoiceInput() {
-    if (recognition && isListening) {
-        recognition.stop();
-        isListening = false;
-    }
+function stopVoice() {
+    if (recognition) recognition.stop();
+    isListening = false;
+    document.getElementById("voiceBtn").classList.remove("listening");
 }
 
-/* ================= SPEAK ================= */
 function speak(text) {
-
-    stopSpeaking();
-
-    let speech = new SpeechSynthesisUtterance(text);
-
-    speech.lang = "en-IN";
-    speech.rate = 1;
-    speech.pitch = 1.2;
-
-    let voices = speechSynthesis.getVoices();
-
-    let femaleVoice = voices.find(v =>
-        v.name.toLowerCase().includes("female") ||
-        v.name.toLowerCase().includes("zira") ||
-        v.name.toLowerCase().includes("google uk english female")
-    );
-
-    if (femaleVoice) {
-        speech.voice = femaleVoice;
-    }
-
-    currentSpeech = speech;
-    window.speechSynthesis.speak(speech);
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = "en-IN"; u.rate = 1; u.pitch = 1.1;
+    const v = speechSynthesis.getVoices().find(v => v.name.toLowerCase().includes("female") || v.name.toLowerCase().includes("zira"));
+    if (v) u.voice = v;
+    speechSynthesis.speak(u);
 }
 
-/* ================= STOP SPEAK ================= */
-function stopSpeaking() {
-    if (window.speechSynthesis.speaking) {
-        window.speechSynthesis.cancel();
-    }
-}
+function stopSpeaking() { speechSynthesis.cancel(); }
 
-/* ================= CLEAR CHAT ================= */
 async function clearChat() {
+    stopSpeaking(); stopVoice();
     await fetch("/clear_chat");
-
-    stopSpeaking();
-    stopVoiceInput();
-
-    document.getElementById("chatbox").innerHTML = `
-        <div class="bot-msg">
-            <b>AI Coach</b><br>
-            Chat cleared! 🤖 Ready to help again.
-        </div>
-    `;
+    chatbox.innerHTML = "";
+    addMsg("bot", "Chat cleared! 🤖 Ready to help. Ask me anything about cricket!");
 }
 </script>
-
 </body>
 </html>
