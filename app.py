@@ -1,28 +1,30 @@
 from flask import Flask, render_template, request, redirect, session, flash, jsonify, url_for
+from flask.cli import load_dotenv
 from pymongo import MongoClient, DESCENDING
 from flask_mail import Mail, Message
 from bson.objectid import ObjectId
 import random, json
 from datetime import datetime
-from dotenv import load_dotenv
 import os
+import openai
 
-load_dotenv() 
+# ------------------------
+# Load environment variables
+# -----------------------
+load_dotenv()
+
 app = Flask(__name__)
-app.secret_key = os.getenv("FLASK_SECRET_KEY") or "secretkey123"
+app.secret_key = "secretkey123"
 
 # -------- ADMIN EMAILS --------
 ADMIN_EMAILS = ["shalakawagh22@gmail.com", "waghshalaka6@gmail.com"]
 
 # -------- MAIL CONFIG --------
-import os
-from flask_mail import Mail
-
-app.config['MAIL_SERVER'] = os.getenv("MAIL_SERVER")
+app.config['MAIL_SERVER'] = os.getenv("MAIL_SERVER", "smtp.gmail.com")
 app.config['MAIL_PORT'] = int(os.getenv("MAIL_PORT", 587))
 app.config['MAIL_USE_TLS'] = os.getenv("MAIL_USE_TLS", "True") == "True"
-app.config['MAIL_USERNAME'] = os.getenv("MAIL_USERNAME")
-app.config['MAIL_PASSWORD'] = os.getenv("MAIL_PASSWORD")
+app.config['MAIL_USERNAME'] = os.getenv("MAIL_USERNAME","shalakawagh22@gmail.com")
+app.config['MAIL_PASSWORD'] = os.getenv("MAIL_PASSWORD","momkufsqontyhpcz")
 app.config['MAIL_DEFAULT_SENDER'] = os.getenv("MAIL_USERNAME")
 
 mail = Mail(app)
