@@ -1,2 +1,8 @@
-flask
+Flask
 pymongo
+flask-mail
+numpy
+scikit-learn
+gunicorn
+google-generativeai
+requests
